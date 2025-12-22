@@ -279,8 +279,8 @@ if [ -z "$SNOWFLAKE_DATABASE" ]; then
 fi
 
 if [ -z "$SNOWFLAKE_SCHEMA" ]; then
-    # Schema is the base project prefix (not environment-prefixed)
-    SNOWFLAKE_SCHEMA="$DEFAULT_PROJECT_PREFIX"
+    # Default to MMM schema for this project (Analytics Mart)
+    SNOWFLAKE_SCHEMA="MMM"
 fi
 
 if [ -z "$SNOWFLAKE_ROLE" ]; then
