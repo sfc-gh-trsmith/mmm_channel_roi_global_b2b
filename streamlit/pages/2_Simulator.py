@@ -54,7 +54,6 @@ from utils.map_viz import (
 # --- Page Config ---
 st.set_page_config(
     page_title="Budget Simulator | MMM ROI Engine",
-    page_icon="🎛️",
     layout="wide"
 )
 
@@ -265,7 +264,7 @@ def main():
     col_reset, col_actions = st.columns([1, 3])
     
     with col_reset:
-        if st.button("🔄 Reset to Baseline", use_container_width=True):
+        if st.button("Reset to Baseline", use_container_width=True):
             for key in list(st.session_state.keys()):
                 if key.startswith("slider_"):
                     del st.session_state[key]
@@ -275,13 +274,13 @@ def main():
         st.markdown("<p style='font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem;'>Quick Actions</p>", unsafe_allow_html=True)
         qa1, qa2, qa3 = st.columns(3)
         with qa1:
-            optimize_clicked = st.button("🎯 Optimize ROI", use_container_width=True, 
+            optimize_clicked = st.button("Optimize ROI", use_container_width=True, 
                                          help="Shift budget to channels with highest marginal ROI")
         with qa2:
-            balance_clicked = st.button("⚖️ Balance", use_container_width=True,
+            balance_clicked = st.button("Balance", use_container_width=True,
                                         help="Distribute spend evenly across channels")
         with qa3:
-            scale_up = st.button("📈 Scale +20%", use_container_width=True,
+            scale_up = st.button("Scale +20%", use_container_width=True,
                                  help="Increase all channel spend by 20%")
 
     # Filter data by region
@@ -326,7 +325,7 @@ def main():
         )
         
         # Educational expander
-        with st.expander("📈 How to read saturation curves", expanded=False):
+        with st.expander("How to read saturation curves", expanded=False):
             exp = get_explanation("saturation_curves")
             st.markdown(exp.get("content", ""), unsafe_allow_html=True)
         
@@ -444,7 +443,7 @@ def main():
         )
         
         # Educational: Adstock
-        with st.expander("📈 Learn More: How Adstock Works", expanded=False):
+        with st.expander("Learn More: How Adstock Works", expanded=False):
             exp = get_explanation("adstock_carryover")
             st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -708,7 +707,7 @@ def main():
     )
     
     # Educational: Marginal ROI
-    with st.expander("🎯 Learn More: What is Marginal ROI?", expanded=False):
+    with st.expander("Learn More: What is Marginal ROI?", expanded=False):
         exp = get_explanation("marginal_vs_average_roi")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -718,13 +717,13 @@ def main():
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("← Back to Home", use_container_width=True):
+        if st.button("Back to Home", use_container_width=True):
             st.switch_page("mmm_roi_app.py")
     with col2:
-        if st.button("← Strategic Dashboard", use_container_width=True):
+        if st.button("Strategic Dashboard", use_container_width=True):
             st.switch_page("pages/1_Strategic_Dashboard.py")
     with col3:
-        if st.button("Model Explorer →", use_container_width=True):
+        if st.button("Model Explorer", use_container_width=True):
             st.switch_page("pages/3_Model_Explorer.py")
 
 

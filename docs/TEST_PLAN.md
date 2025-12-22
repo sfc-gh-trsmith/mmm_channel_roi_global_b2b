@@ -70,7 +70,7 @@ Before executing any tests:
 
 ### 2.0 No Sandbox Execution
 
-> ⚠️ **Important**: These scripts **cannot run in a sandboxed environment** (e.g., Cursor AI sandbox mode).
+> **Important**: These scripts **cannot run in a sandboxed environment** (e.g., Cursor AI sandbox mode).
 > 
 > The Snowflake CLI requires write access to its cache directory at `~/Library/Caches/pyapp/locks/` (macOS) or equivalent system paths. Sandboxed execution will fail with:
 > ```
@@ -200,7 +200,7 @@ Deploy to isolated environment:
 ./run.sh -p DEV main
 ```
 
-> ⚠️ **Limitation**: External access integration uses hardcoded database path.
+> **Limitation**: External access integration uses hardcoded database path.
 
 ---
 

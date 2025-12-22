@@ -53,7 +53,6 @@ from utils.cortex_analyst import (
 # --- Page Config ---
 st.set_page_config(
     page_title="Model Explorer | MMM ROI Engine",
-    page_icon="🔬",
     layout="wide"
 )
 
@@ -176,7 +175,7 @@ def render_model_health_card(df_results: pd.DataFrame, df_weekly: pd.DataFrame) 
     if issues:
         st.markdown("**Diagnostic Alerts:**")
         for issue in issues:
-            st.markdown(f"- ⚠️ {issue}")
+            st.markdown(f"- [Alert] {issue}")
 
 
 def render_eda_tab(df_weekly: pd.DataFrame):
@@ -334,7 +333,7 @@ def render_diagnostics_tab(df_results: pd.DataFrame, df_weekly: pd.DataFrame):
     render_model_health_card(df_results, df_weekly)
     
     # Educational panel
-    with st.expander("📅 Learn More: Time-Series Cross-Validation", expanded=False):
+    with st.expander("Learn More: Time-Series Cross-Validation", expanded=False):
         exp = get_explanation("time_series_cv")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
     
@@ -404,7 +403,7 @@ def render_diagnostics_tab(df_results: pd.DataFrame, df_weekly: pd.DataFrame):
             st.plotly_chart(fig_coeff, use_container_width=True, key="diag_coeff")
     
     # Educational panel
-    with st.expander("🔄 Learn More: Bootstrap Confidence Intervals", expanded=False):
+    with st.expander("Learn More: Bootstrap Confidence Intervals", expanded=False):
         exp = get_explanation("bootstrap_ci")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
     
@@ -459,14 +458,14 @@ def render_diagnostics_tab(df_results: pd.DataFrame, df_weekly: pd.DataFrame):
         # Download button
         csv = df_results.to_csv(index=False)
         st.download_button(
-            "📥 Export Parameters to CSV",
+            "Export Parameters to CSV",
             csv,
             "mmm_parameters.csv",
             "text/csv"
         )
     
     # Educational panel
-    with st.expander("🧬 Learn More: Nevergrad Optimization", expanded=False):
+    with st.expander("Learn More: Nevergrad Optimization", expanded=False):
         exp = get_explanation("nevergrad_optimization")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -624,7 +623,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
             zone_color = COLOR_DANGER
         
         # Display metrics in expander per channel
-        with st.expander(f"📊 {ch} - {zone}", expanded=(len(selected_channels) == 1)):
+        with st.expander(f"{ch} - {zone}", expanded=(len(selected_channels) == 1)):
             cols = st.columns(5)
             cols[0].metric(
                 "Current Spend",
@@ -667,7 +666,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
             )
     
     # Educational panel
-    with st.expander("📚 How to interpret these metrics", expanded=False):
+    with st.expander("How to interpret these metrics", expanded=False):
         exp = get_explanation("saturation_curves")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
     
@@ -700,7 +699,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                                 border: 1px solid rgba(41, 181, 232, 0.15); border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                     font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
-                            🤖 AI Analysis for {primary_channel}
+                            AI Analysis for {primary_channel}
                         </div>
                         <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
                             {narrative}
@@ -744,7 +743,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                                 border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                     font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
-                            💡 Budget Reallocation Recommendation
+                            Budget Reallocation Recommendation
                         </div>
                         <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
                             {comparative}
@@ -946,7 +945,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                     rec_color = COLOR_DANGER
                 
                 # Display in expander
-                with st.expander(f"📈 {ch} - {recommendation} Spend", expanded=(len(selected_channels) == 1)):
+                with st.expander(f"{ch} - {recommendation} Spend", expanded=(len(selected_channels) == 1)):
                     cols = st.columns(4)
                     cols[0].metric(
                         "Current mROI",
@@ -974,7 +973,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                     # Recommendation text
                     st.markdown(
                         f"<p style='color: {rec_color}; font-weight: 500;'>"
-                        f"{'📈 Room to grow - each dollar returns ${:.2f}'.format(current_mroi) if current_mroi > 1.2 else '⚖️ Near optimal - maintain current levels' if current_mroi >= 0.9 else '📉 Diminishing returns - consider reallocation'}"
+                        f"{'Room to grow - each dollar returns ${:.2f}'.format(current_mroi) if current_mroi > 1.2 else 'Near optimal - maintain current levels' if current_mroi >= 0.9 else 'Diminishing returns - consider reallocation'}"
                         f"</p>",
                         unsafe_allow_html=True
                     )
@@ -1006,7 +1005,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                                         border: 1px solid rgba(41, 181, 232, 0.15); border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                             font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
-                                    🤖 AI Budget Recommendation for {primary_channel}
+                                    AI Budget Recommendation for {primary_channel}
                                 </div>
                                 <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
                                     {m_narrative}
@@ -1030,7 +1029,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                         """, unsafe_allow_html=True)
     
     # Educational panel
-    with st.expander("🔬 Learn More: Hill Saturation Function", expanded=False):
+    with st.expander("Learn More: Hill Saturation Function", expanded=False):
         exp = get_explanation("hill_function")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -1053,7 +1052,7 @@ def render_analyst_tab(session):
     
     if "explorer_analyst_suggested_query" in st.session_state:
         suggested = st.session_state.pop("explorer_analyst_suggested_query")
-        st.info(f"💡 Try asking: \"{suggested}\"")
+        st.info(f"Try asking: \"{suggested}\"")
     
     render_analyst_chat(session, key_prefix="explorer_analyst")
 
@@ -1101,10 +1100,10 @@ def main():
 
     # --- Tabs ---
     tab_diag, tab_eda, tab_curves, tab_analyst = st.tabs([
-        "🔧 Model Diagnostics",
-        "📊 Exploratory Analysis",
-        "📈 Response Curves",
-        "🤖 Cortex Analyst"
+        "Model Diagnostics",
+        "Exploratory Analysis",
+        "Response Curves",
+        "Cortex Analyst"
     ])
     
     with tab_diag:
@@ -1125,13 +1124,13 @@ def main():
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("← Back to Home", use_container_width=True):
+        if st.button("Back to Home", use_container_width=True):
             st.switch_page("mmm_roi_app.py")
     with col2:
-        if st.button("← Strategic Dashboard", use_container_width=True):
+        if st.button("Strategic Dashboard", use_container_width=True):
             st.switch_page("pages/1_Strategic_Dashboard.py")
     with col3:
-        if st.button("← Budget Simulator", use_container_width=True):
+        if st.button("Budget Simulator", use_container_width=True):
             st.switch_page("pages/2_Simulator.py")
 
 

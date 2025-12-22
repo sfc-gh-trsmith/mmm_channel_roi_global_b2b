@@ -324,6 +324,7 @@ def inject_custom_css():
     .persona-card {{
         background: linear-gradient(145deg, {BG_CARD} 0%, {BG_HOVER} 100%);
         border: 1px solid rgba(41, 181, 232, 0.2);
+        border-top: 4px solid {COLOR_PRIMARY};
         border-radius: 16px;
         padding: 2rem;
         text-align: center;
@@ -336,11 +337,6 @@ def inject_custom_css():
         border-color: {COLOR_PRIMARY};
         transform: translateY(-4px);
         box-shadow: 0 12px 40px rgba(41, 181, 232, 0.2);
-    }}
-    
-    .persona-icon {{
-        font-size: 3rem;
-        margin-bottom: 1rem;
     }}
     
     .persona-title {{
@@ -617,11 +613,10 @@ def inject_custom_css():
     ''', unsafe_allow_html=True)
 
 
-def render_persona_card(icon: str, title: str, subtitle: str, description: str) -> str:
+def render_persona_card(title: str, subtitle: str, description: str) -> str:
     """Generate HTML for a persona selection card."""
     return f'''
     <div class="persona-card">
-        <div class="persona-icon">{icon}</div>
         <div class="persona-title">{title}</div>
         <div class="persona-subtitle">{subtitle}</div>
         <div class="persona-description">{description}</div>
@@ -728,7 +723,7 @@ def apply_plotly_theme(fig):
 # ENHANCED COMPONENTS FOR DESCRIPTIVE/PRESCRIPTIVE MMM
 # =============================================================================
 
-def render_learn_more_panel(title: str, content: str, icon: str = "💡") -> str:
+def render_learn_more_panel(title: str, content: str) -> str:
     """
     Generate HTML for a collapsible "Learn More" educational panel.
     
@@ -737,7 +732,7 @@ def render_learn_more_panel(title: str, content: str, icon: str = "💡") -> str
     """
     return f'''
     <div class="learn-more-panel">
-        <div class="learn-more-header">{icon} {title}</div>
+        <div class="learn-more-header">{title}</div>
         <div class="learn-more-content">{content}</div>
     </div>
     '''
@@ -766,16 +761,16 @@ def render_significance_badge(is_significant: bool, roi: float = None) -> str:
     """
     Generate HTML for a significance indicator badge.
     
-    - Green checkmark: Statistically significant (CI excludes breakeven)
-    - Amber warning: Uncertain (wide CI or crosses breakeven)
-    - Red X: Significant but negative (ROI < 1)
+    - Green: Statistically significant (CI excludes breakeven)
+    - Amber: Uncertain (wide CI or crosses breakeven)
+    - Red: Significant but negative (ROI < 1)
     """
     if is_significant:
         if roi is not None and roi < 1.0:
-            return '<span class="significance-badge negative">⚠ Below Breakeven</span>'
-        return '<span class="significance-badge significant">✓ Significant</span>'
+            return '<span class="significance-badge negative">Below Breakeven</span>'
+        return '<span class="significance-badge significant">Significant</span>'
     else:
-        return '<span class="significance-badge uncertain">? Uncertain</span>'
+        return '<span class="significance-badge uncertain">Uncertain</span>'
 
 
 def render_zone_badge(zone: str) -> str:
@@ -789,13 +784,13 @@ def render_zone_badge(zone: str) -> str:
     """
     zone = zone.upper() if zone else 'UNKNOWN'
     if zone == 'EFFICIENT':
-        return '<span class="zone-badge efficient">● Efficient</span>'
+        return '<span class="zone-badge efficient">Efficient</span>'
     elif zone == 'DIMINISHING':
-        return '<span class="zone-badge diminishing">◐ Diminishing</span>'
+        return '<span class="zone-badge diminishing">Diminishing</span>'
     elif zone == 'SATURATED':
-        return '<span class="zone-badge saturated">○ Saturated</span>'
+        return '<span class="zone-badge saturated">Saturated</span>'
     else:
-        return '<span class="zone-badge">— Unknown</span>'
+        return '<span class="zone-badge">Unknown</span>'
 
 
 def render_adstock_decay_viz(theta: float, weeks: int = 8) -> str:

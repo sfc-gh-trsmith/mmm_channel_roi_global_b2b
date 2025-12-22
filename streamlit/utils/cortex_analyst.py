@@ -385,7 +385,7 @@ def render_example_queries(key_prefix: str = "analyst"):
     for i, query in enumerate(EXAMPLE_QUERIES):
         col = cols[i % 2]
         with col:
-            if st.button(f"💡 {query}", key=f"{key_prefix}_example_{i}", use_container_width=True):
+            if st.button(f"{query}", key=f"{key_prefix}_example_{i}", use_container_width=True):
                 # Set the query in session state to be picked up by chat
                 st.session_state[f"{key_prefix}_suggested_query"] = query
                 st.rerun()

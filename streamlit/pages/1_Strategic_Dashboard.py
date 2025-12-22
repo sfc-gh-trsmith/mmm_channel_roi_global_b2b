@@ -54,7 +54,6 @@ from utils.map_viz import (
 # --- Page Config ---
 st.set_page_config(
     page_title="Strategic Dashboard | MMM ROI Engine",
-    page_icon="📊",
     layout="wide"
 )
 
@@ -181,7 +180,7 @@ def main():
     
     # Sidebar refresh button
     with st.sidebar:
-        if st.button("🔄 Refresh Data", help="Clear cache and reload data"):
+        if st.button("Refresh Data", help="Clear cache and reload data"):
             st.cache_data.clear()
             st.rerun()
     
@@ -217,7 +216,7 @@ def main():
     )
     
     # Educational Panel: What is ROI Attribution?
-    with st.expander("📊 Learn More: What is ROI Attribution?", expanded=False):
+    with st.expander("Learn More: What is ROI Attribution?", expanded=False):
         exp = get_explanation("roi_attribution")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -280,7 +279,7 @@ def main():
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Educational Panel: Understanding Confidence Intervals
-    with st.expander("📐 Learn More: Understanding Confidence Intervals", expanded=False):
+    with st.expander("Learn More: Understanding Confidence Intervals", expanded=False):
         exp = get_explanation("confidence_intervals")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
@@ -465,9 +464,9 @@ def main():
     # Legend for colors
     st.markdown("""
     <div style="display: flex; gap: 2rem; margin-top: -1rem; margin-bottom: 1rem; font-size: 0.85rem;">
-        <span><span style="color: #2ECC71;">●</span> Significant & Profitable</span>
-        <span><span style="color: #E74C3C;">●</span> Significant & Below Breakeven</span>
-        <span><span style="color: #F39C12;">●</span> Uncertain (Wide CI)</span>
+        <span><span style="color: #2ECC71; font-weight: bold;">[Significant]</span> Significant & Profitable</span>
+        <span><span style="color: #E74C3C; font-weight: bold;">[Significant]</span> Significant & Below Breakeven</span>
+        <span><span style="color: #F39C12; font-weight: bold;">[Uncertain]</span> Uncertain (Wide CI)</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -505,7 +504,7 @@ def main():
         )
         
         # Show supporting detail in expander
-        with st.expander("📊 View recommendation details", expanded=False):
+        with st.expander("View recommendation details", expanded=False):
             col_from, col_to = st.columns(2)
             with col_from:
                 st.markdown(f"**Source Channel: {rec['from_channel']}**")
@@ -521,7 +520,7 @@ def main():
                 st.markdown(render_significance_badge(rec.get('to_significant', True), rec['to_roas']), unsafe_allow_html=True)
     
     # Educational Panel: Why These Recommendations?
-    with st.expander("💡 Learn More: Why These Recommendations?", expanded=False):
+    with st.expander("Learn More: Why These Recommendations?", expanded=False):
         exp = get_explanation("budget_optimizer")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
@@ -594,7 +593,7 @@ def main():
         cols = st.columns(3)
         for i, (_, row) in enumerate(df_actions.iterrows()):
             with cols[i]:
-                badge = "✓ High Confidence" if row.get('IS_SIGNIFICANT', True) else "? Uncertain"
+                badge = "[High Confidence]" if row.get('IS_SIGNIFICANT', True) else "[Uncertain]"
                 badge_color = COLOR_SUCCESS if row.get('IS_SIGNIFICANT', True) else COLOR_WARNING
                 st.markdown(f"""
                 <div style="background: rgba(41, 181, 232, 0.1); border: 1px solid rgba(41, 181, 232, 0.3); 
@@ -615,13 +614,13 @@ def main():
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("← Back to Home", use_container_width=True):
+        if st.button("Back to Home", use_container_width=True):
             st.switch_page("mmm_roi_app.py")
     with col2:
-        if st.button("Open Budget Simulator →", use_container_width=True):
+        if st.button("Open Budget Simulator", use_container_width=True):
             st.switch_page("pages/2_Simulator.py")
     with col3:
-        if st.button("Explore Model Details →", use_container_width=True):
+        if st.button("Explore Model Details", use_container_width=True):
             st.switch_page("pages/3_Model_Explorer.py")
 
 

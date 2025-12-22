@@ -27,7 +27,6 @@ from utils.styling import (
 # --- Page Config ---
 st.set_page_config(
     page_title="About | MMM ROI Engine",
-    page_icon="📋",
     layout="wide"
 )
 
@@ -180,7 +179,7 @@ def main():
         <div style="background: linear-gradient(135deg, {BG_CARD}, {BG_HOVER}); 
                     border-radius: 10px; padding: 1rem; border: 1px dashed rgba(255,255,255,0.2);">
             <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem; text-align: center;">
-                📅 Data refreshed weekly via Snowflake Tasks
+                Data refreshed weekly via Snowflake Tasks
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -218,7 +217,7 @@ def main():
     # -------------------------------------------------------------------------
     # EXECUTIVE OVERVIEW SECTION
     # -------------------------------------------------------------------------
-    st.markdown("### 📊 Executive Overview")
+    st.markdown("### Executive Overview")
     
     st.markdown("#### Why Traditional Attribution Fails for B2B")
     
@@ -227,7 +226,7 @@ def main():
     with col1:
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
-            <h4 style="color: {COLOR_ACCENT};">❌ Last-Click Attribution</h4>
+            <h4 style="color: {COLOR_ACCENT};">Last-Click Attribution</h4>
             <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
                 Credits the final touchpoint before conversion. In B2B, that's often a 
                 salesperson—ignoring the 6 months of marketing that created the opportunity.
@@ -238,7 +237,7 @@ def main():
     with col2:
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
-            <h4 style="color: {COLOR_ACCENT};">❌ MTA / Multi-Touch</h4>
+            <h4 style="color: {COLOR_ACCENT};">MTA / Multi-Touch</h4>
             <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
                 Requires user-level tracking, which is impossible when 60% of revenue flows 
                 through distributors who never touch your digital properties.
@@ -249,7 +248,7 @@ def main():
     with col3:
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
-            <h4 style="color: {COLOR_SUCCESS};">✅ Marketing Mix Modeling</h4>
+            <h4 style="color: {COLOR_SUCCESS};">Marketing Mix Modeling</h4>
             <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
                 Uses <strong>aggregate data</strong> (total spend vs. total revenue) with 
                 statistical regression. Works for long cycles and distributor sales.
@@ -286,7 +285,7 @@ def main():
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, {COLOR_PRIMARY}15, {COLOR_SECONDARY}15); 
                     border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 1.25rem; text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
             <div style="color: white; font-weight: 600;">Unified Attribution</div>
             <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
                 Single ROI per Channel × Region × Product
@@ -298,7 +297,7 @@ def main():
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, {COLOR_SUCCESS}15, {COLOR_SUCCESS}08); 
                     border: 1px solid {COLOR_SUCCESS}; border-radius: 12px; padding: 1.25rem; text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
             <div style="color: white; font-weight: 600;">Confidence Intervals</div>
             <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
                 "LinkedIn ROI: 3.2x [2.8 - 3.6]"
@@ -310,7 +309,7 @@ def main():
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, {COLOR_ACCENT}15, {COLOR_ACCENT}08); 
                     border: 1px solid {COLOR_ACCENT}; border-radius: 12px; padding: 1.25rem; text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
             <div style="color: white; font-weight: 600;">Marginal ROI</div>
             <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
                 Where should the NEXT dollar go?
@@ -322,7 +321,7 @@ def main():
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, {COLOR_WARNING}15, {COLOR_WARNING}08); 
                     border: 1px solid {COLOR_WARNING}; border-radius: 12px; padding: 1.25rem; text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔮</div>
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
             <div style="color: white; font-weight: 600;">What-If Simulation</div>
             <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
                 Predict lift before reallocation
@@ -335,7 +334,7 @@ def main():
     # -------------------------------------------------------------------------
     # TECHNICAL DEEP-DIVE SECTION
     # -------------------------------------------------------------------------
-    st.markdown("### 🔬 Technical Deep-Dive")
+    st.markdown("### Technical Deep-Dive")
     
     st.markdown("#### MMM Algorithm Architecture")
     
@@ -422,7 +421,7 @@ def main():
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_SUCCESS}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-                                 font-size: 0.75rem; font-weight: 600;">✓</span>
+                                 font-size: 0.75rem; font-weight: 600;">OK</span>
                     <span style="color: rgba(255,255,255,0.85);">Write to <code>MMM.MODEL_RESULTS</code></span>
                 </div>
             </div>
@@ -479,7 +478,7 @@ config = MMMConfig(
     
     st.markdown(f"""
     <div style="background: {BG_CARD}; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
-        <div style="color: {COLOR_PRIMARY}; font-weight: 600; margin-bottom: 0.5rem;">📓 Notebook Location</div>
+        <div style="color: {COLOR_PRIMARY}; font-weight: 600; margin-bottom: 0.5rem;">Notebook Location</div>
         <code style="color: rgba(255,255,255,0.7);">notebooks/01_mmm_training.ipynb</code>
         <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 0.5rem;">
             Runs on Snowflake Notebooks or SPCS with Python 3.11
@@ -592,7 +591,7 @@ config = MMMConfig(
     with col1:
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
-            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">📊 Strategic Dashboard</h4>
+            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Strategic Dashboard</h4>
             <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
                 Unified view of ROI across all business units with revenue attribution, 
                 regional heatmaps, and actionable recommendations.
@@ -605,7 +604,7 @@ config = MMMConfig(
         
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
-            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">🔬 Model Explorer</h4>
+            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Model Explorer</h4>
             <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
                 Deep-dive into response curves, confidence intervals, and ad-hoc 
                 analysis via the Cortex Analyst chat interface.
@@ -619,7 +618,7 @@ config = MMMConfig(
     with col2:
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
-            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">🎛️ Budget Simulator</h4>
+            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Budget Simulator</h4>
             <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
                 "What-if" scenario modeling—adjust sliders to simulate budget reallocation 
                 and see predicted revenue impact in real-time.
@@ -632,7 +631,7 @@ config = MMMConfig(
     
         st.markdown(f"""
         <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
-            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">📋 About</h4>
+            <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">About</h4>
             <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
                 Project documentation for business and technical audiences 
                 (you are here).
@@ -688,12 +687,12 @@ config = MMMConfig(
     st.markdown("## Technology Stack")
     
     tech_items = [
-        ("❄️ Snowflake", "Data warehouse, compute, and governance"),
-        ("🐍 Snowpark ML", "Python ML training on Snowflake compute"),
-        ("🤖 Cortex AI", "Natural language analytics (Analyst & Search)"),
-        ("📱 Streamlit", "Interactive web application framework"),
-        ("⚡ Nevergrad", "Hyperparameter optimization for MMM"),
-        ("📈 Ridge Regression", "Core MMM algorithm with positive constraints")
+        ("Snowflake", "Data warehouse, compute, and governance"),
+        ("Snowpark ML", "Python ML training on Snowflake compute"),
+        ("Cortex AI", "Natural language analytics (Analyst & Search)"),
+        ("Streamlit", "Interactive web application framework"),
+        ("Nevergrad", "Hyperparameter optimization for MMM"),
+        ("Ridge Regression", "Core MMM algorithm with positive constraints")
     ]
     
     cols = st.columns(3)
@@ -740,7 +739,7 @@ config = MMMConfig(
                 </div>
             </div>
             <div style="margin-bottom: 1rem;">
-                <div style="color: {COLOR_SUCCESS}; font-weight: 600;">✓ Significant</div>
+                <div style="color: {COLOR_SUCCESS}; font-weight: 600;">Significant</div>
                 <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
                     The entire CI is above zero—statistically reliable.
                 </div>

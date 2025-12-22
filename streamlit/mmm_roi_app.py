@@ -26,7 +26,6 @@ from utils.styling import (
 # --- Page Config ---
 st.set_page_config(
     page_title="Global B2B MMM & ROI Engine",
-    page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -88,7 +87,6 @@ def main():
     with col1:
         st.markdown(
             render_persona_card(
-                icon="📊",
                 title="Strategic View",
                 subtitle="CMO / VP Global Markets",
                 description="Executive ROI dashboard with unified channel attribution and revenue impact analysis."
@@ -101,7 +99,6 @@ def main():
     with col2:
         st.markdown(
             render_persona_card(
-                icon="🎛️",
                 title="Operational View",
                 subtitle="Regional Demand Gen Lead",
                 description="What-if budget simulator to model spend reallocation scenarios and predict revenue impact."
@@ -114,7 +111,6 @@ def main():
     with col3:
         st.markdown(
             render_persona_card(
-                icon="🔬",
                 title="Technical View",
                 subtitle="Data Scientist",
                 description="Deep-dive into model diagnostics, response curves, and ad-hoc analysis with Cortex Analyst."

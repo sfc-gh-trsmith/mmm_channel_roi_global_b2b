@@ -25,7 +25,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "roi_attribution": {
         "title": "What is ROI Attribution?",
-        "icon": "📊",
         "content": """
             <strong>Marketing Mix Modeling (MMM)</strong> uses econometric techniques to measure 
             the true impact of each marketing channel on revenue—accounting for factors that 
@@ -47,7 +46,6 @@ EXPLANATIONS = {
     
     "marginal_vs_average_roi": {
         "title": "Average ROI vs. Marginal ROI",
-        "icon": "🎯",
         "content": """
             <strong>Average ROI</strong> = Total revenue attributed / Total spend
             <br>
@@ -74,7 +72,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "confidence_intervals": {
         "title": "Understanding Confidence Intervals",
-        "icon": "📐",
         "content": """
             A <strong>90% confidence interval</strong> means: if we repeated this analysis 
             many times with different data samples, 90% of the resulting intervals would 
@@ -96,15 +93,14 @@ EXPLANATIONS = {
     
     "statistical_significance": {
         "title": "What Does 'Significant' Mean?",
-        "icon": "✓",
         "content": """
             <strong>Statistically significant</strong> means we can be confident the observed 
             effect is real, not just random noise in the data.
             <br><br>
             <strong>In this model:</strong>
             <ul>
-                <li><strong>✓ Significant</strong>: The 90% CI does NOT include breakeven (1.0x ROI)</li>
-                <li><strong>? Uncertain</strong>: The CI crosses 1.0—could be profitable or not</li>
+                <li><strong>Significant</strong>: The 90% CI does NOT include breakeven (1.0x ROI)</li>
+                <li><strong>Uncertain</strong>: The CI crosses 1.0—could be profitable or not</li>
             </ul>
             Significant channels have enough data and clear enough signal to trust the ROI estimate.
             Uncertain channels may need more investment to generate clearer signal, or may 
@@ -119,7 +115,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "adstock_carryover": {
         "title": "How Adstock (Carryover) Works",
-        "icon": "📈",
         "content": """
             <strong>Adstock</strong> captures the "memory" of advertising: today's ad spend 
             continues to influence buyers for weeks after exposure.
@@ -141,7 +136,6 @@ EXPLANATIONS = {
     
     "adstock_technical": {
         "title": "Geometric Adstock Transformation",
-        "icon": "🔬",
         "content": """
             The model applies <strong>geometric adstock</strong> transformation:
             <br><br>
@@ -167,7 +161,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "saturation_curves": {
         "title": "Reading Saturation Curves",
-        "icon": "📉",
         "content": """
             <strong>Saturation curves</strong> show how each additional dollar of spend 
             generates progressively less incremental revenue—the law of diminishing returns.
@@ -190,7 +183,6 @@ EXPLANATIONS = {
     
     "hill_function": {
         "title": "Hill Saturation Function",
-        "icon": "🔬",
         "content": """
             The model uses a <strong>Hill function</strong> (from pharmacology) to capture 
             diminishing returns:
@@ -219,7 +211,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "time_series_cv": {
         "title": "Time-Series Cross-Validation",
-        "icon": "📅",
         "content": """
             Unlike standard cross-validation, <strong>time-series CV</strong> respects 
             temporal order: we always train on past data and test on future data.
@@ -243,7 +234,6 @@ EXPLANATIONS = {
     
     "bootstrap_ci": {
         "title": "Bootstrap Confidence Intervals",
-        "icon": "🔄",
         "content": """
             <strong>Bootstrap</strong> is a resampling technique to quantify uncertainty 
             without assuming a specific statistical distribution.
@@ -273,7 +263,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "budget_optimizer": {
         "title": "Why These Recommendations?",
-        "icon": "💡",
         "content": """
             The budget optimizer finds the allocation that <strong>maximizes predicted 
             revenue</strong> while respecting realistic constraints.
@@ -298,7 +287,6 @@ EXPLANATIONS = {
     
     "recommendation_confidence": {
         "title": "Recommendation Confidence Levels",
-        "icon": "🎯",
         "content": """
             Recommendations are tagged with confidence levels based on the 
             <strong>statistical reliability</strong> of underlying estimates.
@@ -330,7 +318,6 @@ EXPLANATIONS = {
     # -------------------------------------------------------------------------
     "data_sources": {
         "title": "Where Does This Data Come From?",
-        "icon": "🗄️",
         "content": """
             The MMM integrates data from three enterprise systems:
             <br><br>
@@ -357,7 +344,6 @@ EXPLANATIONS = {
     
     "model_controls": {
         "title": "What Are Control Variables?",
-        "icon": "🎛️",
         "content": """
             <strong>Control variables</strong> account for factors that affect revenue 
             but aren't marketing—ensuring we isolate true marketing impact.
@@ -380,7 +366,6 @@ EXPLANATIONS = {
     
     "ridge_regression": {
         "title": "Why Ridge Regression?",
-        "icon": "🔬",
         "content": """
             The model uses <strong>Ridge Regression</strong> (L2 regularization) with 
             positive coefficient constraints.
@@ -403,7 +388,6 @@ EXPLANATIONS = {
     
     "nevergrad_optimization": {
         "title": "How Nevergrad Finds Optimal Parameters",
-        "icon": "🧬",
         "content": """
             <strong>Nevergrad</strong> is Meta's derivative-free optimization library. 
             We use it because MMM hyperparameters don't have clean gradients.
@@ -464,7 +448,7 @@ def render_explanation_expander(key: str, st_module):
     if not exp:
         return
     
-    with st_module.expander(f"{exp['icon']} {exp['title']}", expanded=False):
+    with st_module.expander(f"{exp['title']}", expanded=False):
         st_module.markdown(exp['content'], unsafe_allow_html=True)
 
 

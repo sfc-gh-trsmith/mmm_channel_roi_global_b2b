@@ -313,16 +313,16 @@ def render_region_selector_map(df_results: pd.DataFrame,
         # Add legend for ROI colors
         st.markdown("""
         <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 0.5rem; margin-bottom: 1rem;">
-            <span style="color: #94a3b8;"><span style="color: #10b981;">●</span> High ROI (&gt;1.5x)</span>
-            <span style="color: #94a3b8;"><span style="color: #f59e0b;">●</span> Medium ROI (0.5-1.5x)</span>
-            <span style="color: #94a3b8;"><span style="color: #ef4444;">●</span> Low ROI (&lt;0.5x)</span>
+            <span style="color: #94a3b8;"><span style="color: #10b981; font-weight: bold;">[High]</span> High ROI (&gt;1.5x)</span>
+            <span style="color: #94a3b8;"><span style="color: #f59e0b; font-weight: bold;">[Medium]</span> Medium ROI (0.5-1.5x)</span>
+            <span style="color: #94a3b8;"><span style="color: #ef4444; font-weight: bold;">[Low]</span> Low ROI (&lt;0.5x)</span>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.info("No regional data available for map visualization.")
     
     # Build segmented control options with ROI values
-    seg_options = [{'value': 'all', 'label': '🌐 All Regions', 'badge': ''}]
+    seg_options = [{'value': 'all', 'label': 'All Regions', 'badge': ''}]
     
     for region_code in REGION_COORDS.keys():
         region_data = df_regional[df_regional['REGION'] == region_code]
