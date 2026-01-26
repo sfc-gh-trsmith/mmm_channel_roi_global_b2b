@@ -6,18 +6,17 @@
 -- PURPOSE: Validate that the pipeline model (with embedded adstock/saturation
 -- transformations) produces predictions from raw spend data.
 --
--- IMPORTANT: The pipeline model was logged with target_platforms=SPCS, so
--- inference CANNOT run directly in warehouse. Use one of:
---   1. Python notebook (03_test_pipeline_model.ipynb) with Registry.run()
---   2. Create an inference service on SPCS
+-- REQUIREMENTS: Model must be registered with conda_dependencies to enable
+-- warehouse inference. If you see "cannot be called in warehouse" errors,
+-- re-run cell 18 in notebook 01 to register with conda_dependencies.
 --
 -- MODEL INPUT SIGNATURE (19 columns):
 --   Media Channels (10): Raw weekly spend per channel
 --   Control Variables (9): TREND, SIN_1, COS_1, SIN_2, COS_2, Q1_FLAG, Q3_FLAG, PMI_INDEX, COMPETITOR_SOV
 --
 -- The pipeline internally applies:
---   1. Adstock (carryover effect with optimized decay θ)
---   2. Hill Saturation (diminishing returns with optimized α, γ)
+--   1. Adstock (carryover effect with optimized decay theta)
+--   2. Hill Saturation (diminishing returns with optimized alpha, gamma)
 --   3. StandardScaler normalization
 --   4. Ridge regression prediction
 --
@@ -80,13 +79,8 @@ SELECT COUNT(*) AS row_count,
 FROM V_PIPELINE_MODEL_INPUT;
 
 -- =============================================================================
--- STEP 2: Test the Pipeline Model
--- NOTE: Direct SQL inference requires SPCS. Use Python notebook instead.
--- This section shows what the query WOULD look like.
+-- STEP 2: Run Pipeline Model Inference (Warehouse)
 -- =============================================================================
-
--- UNCOMMENT IF RUNNING IN SPCS SERVICE CONTEXT:
-/*
 CREATE OR REPLACE TABLE PIPELINE_PREDICTIONS AS
 SELECT 
     WEEK_START,
@@ -111,8 +105,7 @@ SELECT
         Q3_FLAG,
         PMI_INDEX,
         COMPETITOR_SOV
-    ) AS PREDICTION_OBJECT,
-    PREDICTION_OBJECT:output_feature_0::FLOAT AS PREDICTED_REVENUE,
+    ):output_feature_0::FLOAT AS PREDICTED_REVENUE,
     GOOGLE_ADS_GLOBAL_ALL,
     LINKEDIN_GLOBAL_ALL,
     META_FACEBOOK_GLOBAL_ALL,
@@ -120,16 +113,11 @@ SELECT
     TREND,
     PMI_INDEX
 FROM V_PIPELINE_MODEL_INPUT;
-*/
-
--- For now, run the Python notebook: notebooks/03_test_pipeline_model.ipynb
-SELECT 'Run notebook 03_test_pipeline_model.ipynb for inference (requires SPCS)' AS NEXT_STEP;
 
 -- =============================================================================
 -- STEP 3: Evaluate prediction quality
 -- =============================================================================
-SELECT 
-    '--- PIPELINE MODEL TEST RESULTS ---' AS SECTION;
+SELECT '--- PIPELINE MODEL TEST RESULTS ---' AS SECTION;
 
 -- Overall metrics
 SELECT 
