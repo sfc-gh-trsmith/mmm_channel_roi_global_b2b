@@ -59,7 +59,7 @@ st.set_page_config(
 inject_custom_css()
 
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def load_explorer_data(_session):
     """Load all data for model exploration including enhanced fields."""
     # Import centralized queries from data_loader
@@ -134,42 +134,32 @@ def render_model_health_card(df_results: pd.DataFrame, df_weekly: pd.DataFrame) 
     quality_color = COLOR_SUCCESS if quality_score >= 70 else COLOR_WARNING if quality_score >= 50 else COLOR_DANGER
     quality_text = "Good" if quality_score >= 70 else "Fair" if quality_score >= 50 else "Needs Attention"
     
-    st.markdown(f"""
-    <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h4 style="margin: 0; color: white;">Model Health Assessment</h4>
-            <div style="background: {quality_color}22; color: {quality_color}; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600;">
-                {quality_text} ({quality_score}/100)
-            </div>
+    # Header row with title and badge
+    hcol1, hcol2 = st.columns([3, 1])
+    with hcol1:
+        st.markdown("#### Model Health Assessment")
+    with hcol2:
+        st.markdown(f"""
+        <div style="background: {quality_color}22; color: {quality_color}; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; text-align: center;">
+            {quality_text} ({quality_score}/100)
         </div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
-            <div style="text-align: center;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">CV MAPE</div>
-                <div style="font-size: 1.5rem; font-weight: 600; color: {COLOR_SUCCESS if cv_mape and cv_mape < 15 else COLOR_WARNING if cv_mape and cv_mape < 20 else COLOR_DANGER};">
-                    {f'{cv_mape:.1f}%' if cv_mape else 'N/A'}
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">In-Sample R²</div>
-                <div style="font-size: 1.5rem; font-weight: 600; color: {COLOR_SUCCESS if r_squared and r_squared > 0.85 else COLOR_WARNING};">
-                    {f'{r_squared:.3f}' if r_squared else 'N/A'}
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Significant</div>
-                <div style="font-size: 1.5rem; font-weight: 600; color: {COLOR_SUCCESS if significant_pct and significant_pct > 60 else COLOR_WARNING};">
-                    {f'{significant_pct:.0f}%' if significant_pct else 'N/A'}
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">Channels</div>
-                <div style="font-size: 1.5rem; font-weight: 600; color: white;">
-                    {n_channels}
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    
+    # Metrics row using st.columns
+    mcol1, mcol2, mcol3, mcol4 = st.columns(4)
+    
+    cv_color = COLOR_SUCCESS if cv_mape and cv_mape < 15 else COLOR_WARNING if cv_mape and cv_mape < 20 else COLOR_DANGER
+    r2_color = COLOR_SUCCESS if r_squared and r_squared > 0.85 else COLOR_WARNING
+    sig_color = COLOR_SUCCESS if significant_pct and significant_pct > 60 else COLOR_WARNING
+    
+    with mcol1:
+        st.metric("CV MAPE", f"{cv_mape:.1f}%" if cv_mape else "N/A")
+    with mcol2:
+        st.metric("In-Sample R²", f"{r_squared:.3f}" if r_squared else "N/A")
+    with mcol3:
+        st.metric("Significant", f"{significant_pct:.0f}%" if significant_pct else "N/A")
+    with mcol4:
+        st.metric("Channels", n_channels)
     
     # Issues list
     if issues:
@@ -346,23 +336,51 @@ def render_diagnostics_tab(df_results: pd.DataFrame, df_weekly: pd.DataFrame):
     if 'ROI_CI_LOWER' in df_results.columns and 'ROI_CI_UPPER' in df_results.columns:
         fig_coeff = go.Figure()
         
-        # Add bars with error bars
+        # Determine colors per bar based on significance
+        bar_colors = [COLOR_SUCCESS if row.get('IS_SIGNIFICANT', True) else COLOR_WARNING 
+                     for _, row in df_sorted.iterrows()]
+        
+        # Add main bar trace
         fig_coeff.add_trace(go.Bar(
             x=df_sorted['ROI'],
             y=df_sorted['CHANNEL'],
             orientation='h',
-            marker_color=[COLOR_SUCCESS if row.get('IS_SIGNIFICANT', True) else COLOR_WARNING 
-                         for _, row in df_sorted.iterrows()],
+            marker_color=bar_colors,
             error_x=dict(
                 type='data',
                 array=(df_sorted['ROI_CI_UPPER'] - df_sorted['ROI']).tolist(),
                 arrayminus=(df_sorted['ROI'] - df_sorted['ROI_CI_LOWER']).tolist(),
-                color='rgba(255, 255, 255, 0.4)',
-                thickness=1.5,
-                width=4
+                color='#444444',
+                thickness=2,
+                width=6
             ),
+            showlegend=False
+        ))
+        
+        # Add text labels separately so they render on top
+        fig_coeff.add_trace(go.Scatter(
+            x=df_sorted['ROI'],
+            y=df_sorted['CHANNEL'],
+            mode='text',
             text=[f"{v:.2f}x" for v in df_sorted['ROI']],
-            textposition='outside'
+            textposition='middle right',
+            textfont=dict(color='#333333', size=11),
+            showlegend=False,
+            hoverinfo='skip'
+        ))
+        
+        # Add invisible traces for legend
+        fig_coeff.add_trace(go.Bar(
+            x=[None], y=[None], orientation='h',
+            marker_color=COLOR_SUCCESS,
+            name='Statistically Significant',
+            showlegend=True
+        ))
+        fig_coeff.add_trace(go.Bar(
+            x=[None], y=[None], orientation='h',
+            marker_color=COLOR_WARNING,
+            name='Not Significant (CI crosses 0)',
+            showlegend=True
         ))
         
         fig_coeff = apply_plotly_theme(fig_coeff)
@@ -378,7 +396,15 @@ def render_diagnostics_tab(df_results: pd.DataFrame, df_weekly: pd.DataFrame):
                 dict(x=1, y=len(df_sorted), text="Breakeven", showarrow=False,
                      font=dict(color='rgba(255,255,255,0.5)', size=9), yshift=10)
             ],
-            height=max(350, len(df_sorted) * 30)
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="left",
+                x=0,
+                font=dict(size=11)
+            ),
+            height=max(400, len(df_sorted) * 30)
         )
         st.plotly_chart(fig_coeff, use_container_width=True, key="diag_coeff_ci")
     else:
@@ -695,13 +721,12 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                 
                 if narrative:
                     st.markdown(f"""
-                    <div style="background: linear-gradient(145deg, rgba(26, 31, 46, 0.8) 0%, rgba(37, 45, 61, 0.6) 100%);
-                                border: 1px solid rgba(41, 181, 232, 0.15); border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
+                    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                     font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
                             AI Analysis for {primary_channel}
                         </div>
-                        <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
+                        <div style="color: #212529; font-size: 0.95rem; line-height: 1.6;">
                             {narrative}
                         </div>
                     </div>
@@ -717,7 +742,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                          "optimize carefully" if zone == "diminishing returns" else "consider reallocating budget"
                 
                 st.markdown(f"""
-                <div style="background: {BG_CARD}; border-radius: 12px; padding: 1rem; margin: 0.5rem 0;">
+                <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 12px; padding: 1rem; margin: 0.5rem 0; color: #212529;">
                     <strong>{primary_channel}</strong> is currently in the <strong>{zone}</strong> zone 
                     with a marginal ROI of {primary_metrics.get('marginal_roi', 0):.2f}x. 
                     Based on current saturation ({primary_metrics.get('saturation_pct', 0):.0f}%), 
@@ -739,13 +764,12 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                 
                 if comparative:
                     st.markdown(f"""
-                    <div style="background: linear-gradient(135deg, rgba(41, 181, 232, 0.1) 0%, rgba(17, 86, 127, 0.1) 100%);
-                                border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
+                    <div style="background: #e7f5ff; border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                     font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
                             Budget Reallocation Recommendation
                         </div>
-                        <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
+                        <div style="color: #212529; font-size: 0.95rem; line-height: 1.6;">
                             {comparative}
                         </div>
                     </div>
@@ -1001,13 +1025,12 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                         
                         if m_narrative:
                             st.markdown(f"""
-                            <div style="background: linear-gradient(145deg, rgba(26, 31, 46, 0.8) 0%, rgba(37, 45, 61, 0.6) 100%);
-                                        border: 1px solid rgba(41, 181, 232, 0.15); border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
+                            <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 12px; padding: 1.25rem; margin: 1rem 0;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem; color: {COLOR_PRIMARY}; 
                                             font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
                                     AI Budget Recommendation for {primary_channel}
                                 </div>
-                                <div style="color: rgba(255, 255, 255, 0.85); font-size: 0.95rem; line-height: 1.6;">
+                                <div style="color: #212529; font-size: 0.95rem; line-height: 1.6;">
                                     {m_narrative}
                                 </div>
                             </div>
@@ -1021,7 +1044,7 @@ def render_curves_tab(df_curves: pd.DataFrame, df_results: pd.DataFrame):
                               "maintain current levels" if primary_mmetrics.get('current_mroi', 0) >= 0.9 else \
                               "consider reducing spend"
                         st.markdown(f"""
-                        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1rem; margin: 0.5rem 0;">
+                        <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 12px; padding: 1rem; margin: 0.5rem 0; color: #212529;">
                             Based on marginal efficiency analysis, <strong>{primary_channel}</strong> 
                             has a current marginal ROI of {primary_mmetrics.get('current_mroi', 0):.2f}x. 
                             Recommendation: {rec}.
@@ -1099,11 +1122,10 @@ def main():
         """, unsafe_allow_html=True)
 
     # --- Tabs ---
-    tab_diag, tab_eda, tab_curves, tab_analyst = st.tabs([
+    tab_diag, tab_eda, tab_curves = st.tabs([
         "Model Diagnostics",
         "Exploratory Analysis",
-        "Response Curves",
-        "Cortex Analyst"
+        "Response Curves"
     ])
     
     with tab_diag:
@@ -1114,9 +1136,6 @@ def main():
     
     with tab_curves:
         render_curves_tab(df_curves, df_results)
-    
-    with tab_analyst:
-        render_analyst_tab(session)
 
     # --- Navigation ---
     st.markdown("<br>", unsafe_allow_html=True)

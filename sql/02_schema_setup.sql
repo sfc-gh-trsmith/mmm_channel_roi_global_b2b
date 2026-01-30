@@ -738,5 +738,13 @@ SELECT
     NULL AS BUSINESS_GROUP_NAME
 FROM MMM.MODEL_RESULTS;
 
+-- ============================================================================
+-- EVENT TABLE FOR STREAMLIT LOGGING
+-- ============================================================================
+-- Event tables capture Python logging calls from Streamlit apps
+-- View logs via: SELECT * FROM STREAMLIT_DEBUG_EVENTS ORDER BY TIMESTAMP DESC;
+CREATE EVENT TABLE IF NOT EXISTS STREAMLIT_DEBUG_EVENTS 
+    COMMENT = 'Event table for debugging Streamlit app issues';
+
 SELECT 'Schema setup complete.' as status;
 

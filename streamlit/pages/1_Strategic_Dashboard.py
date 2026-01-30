@@ -42,14 +42,6 @@ from utils.styling import (
     COLOR_WARNING
 )
 from utils.explanations import get_explanation, render_explanation_expander
-from utils.map_viz import (
-    render_region_selector_map,
-    render_region_drill_down,
-    render_regional_summary_metrics,
-    aggregate_by_region,
-    extract_region_from_channel,
-    REGION_COORDS
-)
 
 # --- Page Config ---
 st.set_page_config(
@@ -60,25 +52,26 @@ st.set_page_config(
 inject_custom_css()
 
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def load_dashboard_data(_session):
     """Load all data needed for the executive dashboard including CI data."""
     # Import centralized queries from data_loader
-    from utils.data_loader import QUERIES
+    from utils.data_loader import QUERIES, DATABASE
     
     queries = {
         "ROI": QUERIES["ROI"],
         "WEEKLY": QUERIES["WEEKLY"],
         "RESULTS": QUERIES["RESULTS"],
-        "RESULTS_INTERPRETED": "SELECT * FROM MMM.V_MODEL_RESULTS_INTERPRETED",
+        "RESULTS_INTERPRETED": f"SELECT * FROM {DATABASE}.MMM.V_MODEL_RESULTS_INTERPRETED",
     }
     return run_queries_parallel(_session, queries)
 
 
-def generate_recommendation_with_confidence(df_results: pd.DataFrame, df_roi: pd.DataFrame) -> dict:
+def generate_recommendation_with_confidence(df_results: pd.DataFrame, df_roi: pd.DataFrame, min_spend_pct: float = 10) -> dict:
     """
     Generate recommendation with confidence level based on CI width.
     Uses model results with uncertainty quantification.
+    Only considers channels above spend threshold for reliable recommendations.
     """
     if df_roi.empty:
         return None
@@ -91,11 +84,22 @@ def generate_recommendation_with_confidence(df_results: pd.DataFrame, df_roi: pd
     if df.empty:
         return None
     
-    avg_roas = df['ROAS'].mean()
+    # Filter to reliable channels only (above spend threshold)
+    if not df_results.empty and 'CURRENT_SPEND' in df_results.columns:
+        max_spend = df_results['CURRENT_SPEND'].max()
+        reliable_channels = df_results[df_results['CURRENT_SPEND'] >= max_spend * min_spend_pct / 100]['CHANNEL'].tolist()
+        df['IS_RELIABLE'] = df['CHANNEL'].isin(reliable_channels)
+        df_reliable = df[df['IS_RELIABLE']]
+        if df_reliable.empty:
+            df_reliable = df  # Fall back to all if none match
+    else:
+        df_reliable = df
     
-    # Find worst and best performers
-    worst = df.loc[df['ROAS'].idxmin()]
-    best = df.loc[df['ROAS'].idxmax()]
+    avg_roas = df_reliable['ROAS'].mean()
+    
+    # Find worst and best performers from RELIABLE channels only
+    worst = df_reliable.loc[df_reliable['ROAS'].idxmin()]
+    best = df_reliable.loc[df_reliable['ROAS'].idxmax()]
     
     # Get CI data if available from model results
     ci_lower_from = None
@@ -106,8 +110,10 @@ def generate_recommendation_with_confidence(df_results: pd.DataFrame, df_roi: pd
     is_to_significant = True
     
     if not df_results.empty and 'CHANNEL' in df_results.columns:
-        from_row = df_results[df_results['CHANNEL'].str.contains(worst['CHANNEL'], case=False, na=False)]
-        to_row = df_results[df_results['CHANNEL'].str.contains(best['CHANNEL'], case=False, na=False)]
+        from_match = worst['CHANNEL']
+        to_match = best['CHANNEL']
+        from_row = df_results[df_results['CHANNEL'] == from_match]
+        to_row = df_results[df_results['CHANNEL'] == to_match]
         
         if len(from_row) > 0:
             ci_lower_from = from_row['ROI_CI_LOWER'].iloc[0] if 'ROI_CI_LOWER' in from_row else None
@@ -170,6 +176,30 @@ def generate_recommendation_with_confidence(df_results: pd.DataFrame, df_roi: pd
     }
 
 
+# Spend threshold for reliable model estimates (as % of max spend)
+DEFAULT_SPEND_THRESHOLD_PCT = 10  # Channels below 10% of max spend flagged as "needs validation"
+
+
+def classify_channel_reliability(df_results: pd.DataFrame) -> pd.DataFrame:
+    """
+    Classify channels by spend level to indicate reliability of model estimates.
+    Low-spend channels have unreliable ROI estimates due to signal-to-noise issues.
+    """
+    if df_results.empty or 'CURRENT_SPEND' not in df_results.columns:
+        return df_results
+    
+    df = df_results.copy()
+    max_spend = df['CURRENT_SPEND'].max()
+    
+    df['SPEND_PCT_OF_MAX'] = (df['CURRENT_SPEND'] / max_spend * 100).round(1)
+    df['RELIABILITY'] = df['SPEND_PCT_OF_MAX'].apply(
+        lambda x: 'HIGH' if x >= 15 else ('MEDIUM' if x >= 5 else 'LOW')
+    )
+    df['NEEDS_VALIDATION'] = df['RELIABILITY'] == 'LOW'
+    
+    return df
+
+
 def main():
     # --- Session & Data ---
     try:
@@ -178,11 +208,27 @@ def main():
         st.error("Could not connect to Snowflake. Please ensure you're running in Snowflake.")
         return
     
-    # Sidebar refresh button
+    # Sidebar controls
     with st.sidebar:
         if st.button("Refresh Data", help="Clear cache and reload data"):
             st.cache_data.clear()
             st.rerun()
+        
+        st.markdown("---")
+        st.markdown("##### Data Reliability Filter")
+        min_spend_pct = st.slider(
+            "Min spend % of largest channel",
+            min_value=0,
+            max_value=25,
+            value=DEFAULT_SPEND_THRESHOLD_PCT,
+            step=5,
+            help="Channels below this threshold have unreliable model ROI estimates. Consider A/B testing instead."
+        )
+        show_low_spend = st.checkbox(
+            "Show low-spend channels",
+            value=True,
+            help="Include channels that need validation via A/B testing"
+        )
     
     with st.spinner("Loading executive dashboard..."):
         data = load_dashboard_data(session)
@@ -190,6 +236,10 @@ def main():
         df_weekly = data.get("WEEKLY", pd.DataFrame())
         df_results = data.get("RESULTS", pd.DataFrame())
         df_interpreted = data.get("RESULTS_INTERPRETED", pd.DataFrame())
+    
+    # Classify channel reliability based on spend levels
+    if not df_results.empty:
+        df_results = classify_channel_reliability(df_results)
 
     # --- Header ---
     st.markdown("""
@@ -283,41 +333,8 @@ def main():
         exp = get_explanation("confidence_intervals")
         st.markdown(exp.get("content", ""), unsafe_allow_html=True)
 
-    # --- REGIONAL ROI MAP ---
-    st.markdown("### Regional Performance Overview")
-    st.markdown(
-        "<p style='color: rgba(255,255,255,0.6);'>Click a region to filter the dashboard</p>",
-        unsafe_allow_html=True
-    )
-    
-    # Regional map with selection
-    if not df_results.empty:
-        selected_region = render_region_selector_map(df_results, key_prefix="dashboard")
-        
-        # Show regional summary metrics
-        render_regional_summary_metrics(df_results, selected_region)
-        
-        # Regional drill-down cards
-        if selected_region:
-            render_region_drill_down(selected_region, df_results, key_prefix="dashboard_drill")
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Filter df_roi and df_results if a region is selected
-        if selected_region:
-            # Add region column for filtering
-            df_roi['Region'] = df_roi['CHANNEL'].apply(extract_region_from_channel)
-            df_roi = df_roi[df_roi['Region'] == selected_region]
-            
-            df_results_display = df_results.copy()
-            df_results_display['Region'] = df_results_display['CHANNEL'].apply(extract_region_from_channel)
-            df_results = df_results_display[df_results_display['Region'] == selected_region]
-    else:
-        selected_region = None
-
     # --- THE INSIGHT (Charts with CI) ---
-    region_label = f" ({REGION_COORDS.get(selected_region, {}).get('name', selected_region)})" if selected_region else ""
-    st.markdown(f"### Channel Attribution Analysis{region_label}")
+    st.markdown("### Channel Attribution Analysis")
     
     # Check if we have data to display after region filtering
     if df_roi.empty:
@@ -390,36 +407,63 @@ def main():
         df_roas['ROAS'] = df_roas['ATTRIBUTED_REVENUE'] / df_roas['TOTAL_SPEND'].replace(0, np.nan)
         df_roas = df_roas.dropna(subset=['ROAS']).sort_values('ROAS', ascending=True)
         
-        # Merge CI data if available
+        # Merge reliability data (NOT CI bounds - those are for ROI coefficients, not ROAS)
         if not df_results.empty and 'CHANNEL' in df_results.columns:
+            merge_cols = ['CHANNEL', 'IS_SIGNIFICANT', 'CURRENT_SPEND']
+            if 'SPEND_PCT_OF_MAX' in df_results.columns:
+                merge_cols.extend(['SPEND_PCT_OF_MAX', 'RELIABILITY', 'NEEDS_VALIDATION'])
+            
+            df_results_merge = df_results[[c for c in merge_cols if c in df_results.columns]].copy()
+            
             df_roas = df_roas.merge(
-                df_results[['CHANNEL', 'ROI_CI_LOWER', 'ROI_CI_UPPER', 'IS_SIGNIFICANT']].rename(
-                    columns={'ROI_CI_LOWER': 'CI_LOWER', 'ROI_CI_UPPER': 'CI_UPPER'}
-                ),
-                left_on='CHANNEL',
-                right_on='CHANNEL',
+                df_results_merge,
+                on='CHANNEL',
                 how='left'
             )
-        else:
-            # Default CI: ±20% of estimate
-            df_roas['CI_LOWER'] = df_roas['ROAS'] * 0.8
-            df_roas['CI_UPPER'] = df_roas['ROAS'] * 1.2
+        
+        # Calculate CI bounds as percentage of ROAS (not from model coefficients which are different scale)
+        df_roas['CI_LOWER'] = df_roas['ROAS'] * 0.8
+        df_roas['CI_UPPER'] = df_roas['ROAS'] * 1.2
+        if 'IS_SIGNIFICANT' not in df_roas.columns:
             df_roas['IS_SIGNIFICANT'] = df_roas['ROAS'] >= 1.0
+        if 'NEEDS_VALIDATION' not in df_roas.columns:
+            df_roas['NEEDS_VALIDATION'] = False
+        if 'SPEND_PCT_OF_MAX' not in df_roas.columns:
+            df_roas['SPEND_PCT_OF_MAX'] = 100
+        
+        # Apply spend threshold filter
+        if 'SPEND_PCT_OF_MAX' in df_roas.columns:
+            df_roas['ABOVE_THRESHOLD'] = df_roas['SPEND_PCT_OF_MAX'] >= min_spend_pct
+            if not show_low_spend:
+                df_roas = df_roas[df_roas['ABOVE_THRESHOLD']]
         
         if not df_roas.empty:
-            # Color bars based on significance and performance
+            # Color bars based on ROAS: green=profitable (>=1.0), red=unprofitable (<1.0), gray=low spend
             colors = []
-            for _, row in df_roas.iterrows():
-                if row.get('IS_SIGNIFICANT', True):
-                    colors.append(COLOR_SUCCESS if row['ROAS'] >= 1.0 else COLOR_DANGER)
+            y_labels = []
+            for idx, row in df_roas.iterrows():
+                roas_val = row['ROAS']
+                spend_pct = row['SPEND_PCT_OF_MAX'] if pd.notna(row['SPEND_PCT_OF_MAX']) else 100.0
+                needs_val = row['NEEDS_VALIDATION'] if pd.notna(row['NEEDS_VALIDATION']) else False
+                is_low_spend = needs_val or spend_pct < min_spend_pct
+                
+                if is_low_spend:
+                    colors.append('#6B7280')  # Gray for low-spend channels
+                elif roas_val >= 1.0:
+                    colors.append('#28A745')  # Green for profitable
                 else:
-                    colors.append(COLOR_WARNING)  # Uncertain
+                    colors.append('#DC3545')  # Red for unprofitable
+                
+                label = row['CHANNEL']
+                if spend_pct < min_spend_pct:
+                    label += " ⚠️"
+                y_labels.append(label)
             
             fig_roas = go.Figure(go.Bar(
                 x=df_roas['ROAS'],
-                y=df_roas['CHANNEL'],
+                y=y_labels,
                 orientation='h',
-                marker_color=colors,
+                marker=dict(color=colors),
                 text=[f"{v:.2f}x" for v in df_roas['ROAS']],
                 textposition='outside',
                 textfont=dict(color='white'),
@@ -427,9 +471,9 @@ def main():
                     type='data',
                     array=(df_roas['CI_UPPER'] - df_roas['ROAS']).tolist(),
                     arrayminus=(df_roas['ROAS'] - df_roas['CI_LOWER']).tolist(),
-                    color='rgba(255, 255, 255, 0.4)',
-                    thickness=1.5,
-                    width=4
+                    color='#9B59B6',
+                    thickness=2,
+                    width=5
                 )
             ))
             fig_roas = apply_plotly_theme(fig_roas)
@@ -444,7 +488,7 @@ def main():
                         type='line',
                         x0=1, x1=1,
                         y0=-0.5, y1=len(df_roas) - 0.5,
-                        line=dict(color='white', width=2, dash='dash')
+                        line=dict(color='#FFD700', width=2, dash='dash')
                     )
                 ],
                 annotations=[
@@ -452,26 +496,31 @@ def main():
                         x=1, y=len(df_roas),
                         text="Breakeven (1.0x)",
                         showarrow=False,
-                        font=dict(color='rgba(255,255,255,0.6)', size=10),
+                        font=dict(color='#FFD700', size=10),
                         yshift=15
                     )
                 ]
             )
             st.plotly_chart(fig_roas, use_container_width=True, key="strategic_roas")
+            
+            # Show count of filtered channels
+            low_spend_count = df_roas[df_roas.get('SPEND_PCT_OF_MAX', pd.Series([100]*len(df_roas))) < min_spend_pct].shape[0]
+            if low_spend_count > 0:
+                st.caption(f"⚠️ {low_spend_count} channel(s) below {min_spend_pct}% spend threshold - consider A/B testing for validation")
         else:
             st.info("No ROAS data available for the selected region.")
     
     # Legend for colors
-    st.markdown("""
-    <div style="display: flex; gap: 2rem; margin-top: -1rem; margin-bottom: 1rem; font-size: 0.85rem;">
-        <span><span style="color: #2ECC71; font-weight: bold;">[Significant]</span> Significant & Profitable</span>
-        <span><span style="color: #E74C3C; font-weight: bold;">[Significant]</span> Significant & Below Breakeven</span>
-        <span><span style="color: #F39C12; font-weight: bold;">[Uncertain]</span> Uncertain (Wide CI)</span>
+    st.markdown(f"""
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: -0.5rem; margin-bottom: 1rem; font-size: 0.85rem;">
+        <span><span style="color: {COLOR_SUCCESS}; font-weight: bold;">■</span> Profitable (ROAS ≥ 1.0x)</span>
+        <span><span style="color: {COLOR_DANGER}; font-weight: bold;">■</span> Below breakeven (ROAS &lt; 1.0x)</span>
+        <span><span style="color: #6B7280; font-weight: bold;">■</span> Low spend - needs A/B test ⚠️</span>
     </div>
     """, unsafe_allow_html=True)
 
     # --- THE ACTION (Enhanced Recommendation with Confidence) ---
-    rec = generate_recommendation_with_confidence(df_results, df_roi)
+    rec = generate_recommendation_with_confidence(df_results, df_roi, min_spend_pct)
     
     if rec:
         # Determine recommendation styling based on confidence
@@ -532,11 +581,7 @@ def main():
     if not df_weekly.empty:
         st.markdown("### Performance Trends")
         
-        # Filter by region if selected (if CHANNEL column exists in weekly data)
         df_weekly_filtered = df_weekly.copy()
-        if selected_region and 'CHANNEL' in df_weekly.columns:
-            df_weekly_filtered['Region'] = df_weekly_filtered['CHANNEL'].apply(extract_region_from_channel)
-            df_weekly_filtered = df_weekly_filtered[df_weekly_filtered['Region'] == selected_region]
         
         if not df_weekly_filtered.empty:
             df_trend = df_weekly_filtered.groupby('WEEK_START')[['SPEND', 'REVENUE']].sum().reset_index()
@@ -588,25 +633,32 @@ def main():
     if not df_results.empty and 'MARGINAL_ROI' in df_results.columns:
         st.markdown("### Priority Actions")
         
-        df_actions = df_results.nlargest(3, 'MARGINAL_ROI')[['CHANNEL', 'ROI', 'MARGINAL_ROI', 'IS_SIGNIFICANT']]
+        # Filter to reliable channels only for recommendations
+        df_reliable = df_results.copy()
+        if 'SPEND_PCT_OF_MAX' in df_reliable.columns:
+            df_reliable = df_reliable[df_reliable['SPEND_PCT_OF_MAX'] >= min_spend_pct]
         
-        cols = st.columns(3)
-        for i, (_, row) in enumerate(df_actions.iterrows()):
-            with cols[i]:
-                badge = "[High Confidence]" if row.get('IS_SIGNIFICANT', True) else "[Uncertain]"
-                badge_color = COLOR_SUCCESS if row.get('IS_SIGNIFICANT', True) else COLOR_WARNING
-                st.markdown(f"""
-                <div style="background: rgba(41, 181, 232, 0.1); border: 1px solid rgba(41, 181, 232, 0.3); 
-                            border-radius: 12px; padding: 1rem; text-align: center;">
-                    <div style="font-size: 0.75rem; color: {badge_color}; margin-bottom: 0.5rem;">{badge}</div>
-                    <div style="font-weight: 600; color: white; margin-bottom: 0.25rem;">{row['CHANNEL']}</div>
-                    <div style="font-size: 1.5rem; color: {COLOR_PRIMARY}; font-weight: 700;">{row['MARGINAL_ROI']:.2f}x</div>
-                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Marginal ROI</div>
-                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem;">
-                        → Increase investment
+        if df_reliable.empty:
+            st.info("No channels meet the reliability threshold. Adjust the filter in the sidebar.")
+        else:
+            df_actions = df_reliable.nlargest(3, 'MARGINAL_ROI')[['CHANNEL', 'ROI', 'MARGINAL_ROI', 'IS_SIGNIFICANT', 'CURRENT_SPEND']]
+            
+            cols = st.columns(min(3, len(df_actions)))
+            for i, (_, row) in enumerate(df_actions.iterrows()):
+                with cols[i]:
+                    badge = "[High Confidence]" if row.get('IS_SIGNIFICANT', True) else "[Uncertain]"
+                    badge_color = COLOR_SUCCESS if row.get('IS_SIGNIFICANT', True) else COLOR_WARNING
+                    spend_label = f"${row['CURRENT_SPEND']/1e6:.0f}M spend"
+                    st.markdown(f"""
+                    <div class="priority-action-card">
+                        <div class="badge" style="color: {badge_color};">{badge}</div>
+                        <div class="channel-name">{row['CHANNEL']}</div>
+                        <div class="metric-value">{row['MARGINAL_ROI']:.2f}x</div>
+                        <div class="metric-label">Marginal ROI</div>
+                        <div class="spend-info">{spend_label}</div>
+                        <div class="action-text">→ Increase investment</div>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
 
     # --- Navigation ---
     st.markdown("<br>", unsafe_allow_html=True)

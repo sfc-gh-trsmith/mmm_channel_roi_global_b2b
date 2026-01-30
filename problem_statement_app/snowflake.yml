@@ -1,0 +1,11 @@
+definition_version: 2
+entities:
+  MMM_PROBLEM_STATEMENT:
+    type: streamlit
+    identifier:
+      name: MMM_PROBLEM_STATEMENT
+    title: "The Attribution Problem"
+    main_file: app.py
+    query_warehouse: GLOBAL_B2B_MMM_WH
+    artifacts:
+      - app.py

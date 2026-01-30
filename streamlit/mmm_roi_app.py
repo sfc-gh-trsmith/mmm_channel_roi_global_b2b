@@ -8,8 +8,11 @@ Users select their persona to navigate to the appropriate workflow.
 import streamlit as st
 import pandas as pd
 from snowflake.snowpark.context import get_active_session
+import logging
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Add current directory to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -34,15 +37,12 @@ st.set_page_config(
 inject_custom_css()
 
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def load_summary_stats(_session):
     """Load quick summary stats for the landing page."""
-    # Import centralized queries from data_loader
-    from utils.data_loader import QUERIES
-    
     queries = {
-        "ROI": QUERIES["ROI"],
-        "CHANNELS": "SELECT COUNT(DISTINCT CHANNEL_CODE) as CNT FROM DIMENSIONAL.V_MMM_INPUT_WEEKLY"
+        "ROI": "SELECT CHANNEL, TOTAL_SPEND, ATTRIBUTED_REVENUE, ROAS FROM GLOBAL_B2B_MMM.MMM.V_ROI_BY_CHANNEL",
+        "CHANNELS": "SELECT COUNT(DISTINCT CHANNEL_CODE) as CNT FROM GLOBAL_B2B_MMM.DIMENSIONAL.V_MMM_INPUT_WEEKLY"
     }
     return run_queries_parallel(_session, queries)
 
@@ -60,7 +60,8 @@ def main():
         total_rev = df_roi['ATTRIBUTED_REVENUE'].sum() if not df_roi.empty else 0
         num_channels = int(df_channels['CNT'].iloc[0]) if not df_channels.empty else 0
         has_data = True
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to load summary stats: {e}")
         total_spend = 0
         total_rev = 0
         num_channels = 0
@@ -72,7 +73,7 @@ def main():
         <h1 style="font-size: 2.8rem; margin-bottom: 0.5rem;">
             Global B2B Marketing Mix & ROI Engine
         </h1>
-        <p style="font-size: 1.2rem; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto;">
+        <p style="font-size: 1.2rem; color: #6B7280; max-width: 600px; margin: 0 auto;">
             Unlock data-driven marketing allocation with advanced MMM 
             powered by Snowflake and Cortex AI
         </p>
@@ -143,8 +144,8 @@ def main():
 
     # --- Footer ---
     st.markdown("""
-    <div style="text-align: center; margin-top: 4rem; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-        <p style="color: rgba(255,255,255,0.4); font-size: 0.85rem;">
+    <div style="text-align: center; margin-top: 4rem; padding: 2rem; border-top: 1px solid #E5E7EB;">
+        <p style="color: #9CA3AF; font-size: 0.85rem;">
             Powered by Snowflake Snowpark ML • Cortex AI • Streamlit
         </p>
     </div>

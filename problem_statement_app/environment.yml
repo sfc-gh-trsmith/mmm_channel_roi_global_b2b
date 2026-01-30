@@ -1,0 +1,8 @@
+name: problem_statement
+channels:
+  - snowflake
+dependencies:
+  - pandas
+  - numpy
+  - altair
+  - snowflake-snowpark-python

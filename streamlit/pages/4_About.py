@@ -49,17 +49,17 @@ def render_data_source_card(table_name: str, description: str, badge_type: str, 
     if key_fields:
         fields_text = ', '.join(key_fields)
     
-    html = f'<div style="background: {BG_CARD}; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; border: 1px solid rgba(255,255,255,0.1);">'
+    html = f'<div style="background: #f8f9fa; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; border: 1px solid #e0e0e0;">'
     html += f'<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">'
-    html += f'<code style="color: white; font-size: 0.85rem;">{table_name}</code>'
+    html += f'<code style="color: #1a1a2e; font-size: 0.85rem; font-weight: 600;">{table_name}</code>'
     html += f'<span style="background: {badge_color}22; color: {badge_color}; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 12px; font-weight: 600; border: 1px solid {badge_color}44;">{badge_type}</span>'
     html += '</div>'
-    html += f'<div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.4;">{description}</div>'
+    html += f'<div style="color: #444; font-size: 0.85rem; line-height: 1.4;">{description}</div>'
     
     if fields_text:
-        html += f'<div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1);">'
-        html += f'<div style="color: rgba(255,255,255,0.5); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.25rem;">Key Fields</div>'
-        html += f'<code style="font-size: 0.75rem; color: rgba(255,255,255,0.6);">{fields_text}</code>'
+        html += f'<div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e0e0e0;">'
+        html += f'<div style="color: #666; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.25rem;">Key Fields</div>'
+        html += f'<code style="font-size: 0.75rem; color: #555;">{fields_text}</code>'
         html += '</div>'
     
     html += '</div>'
@@ -73,7 +73,7 @@ def main():
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1>Global B2B Marketing Mix & ROI Engine</h1>
-        <p style="color: rgba(255,255,255,0.6); font-size: 1.2rem;">
+        <p style="color: #666; font-size: 1.2rem;">
             Powered by Snowflake Snowpark ML & Cortex AI
         </p>
     </div>
@@ -111,12 +111,12 @@ def main():
     with col2:
         st.markdown("### The Solution")
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; 
+        <div style="background: #f0f7ff; border-radius: 12px; padding: 1.5rem; 
                     border-left: 4px solid {COLOR_PRIMARY};">
-            <p style="color: rgba(255,255,255,0.85); line-height: 1.6;">
+            <p style="color: #333; line-height: 1.6;">
                 A <strong>Marketing Mix Model (MMM)</strong> that:
             </p>
-            <ul style="color: rgba(255,255,255,0.8); line-height: 1.8; padding-left: 1.2rem;">
+            <ul style="color: #444; line-height: 1.8; padding-left: 1.2rem;">
                 <li>Unifies data from all sources</li>
                 <li>Calculates true ROI by channel</li>
                 <li>Provides confidence intervals</li>
@@ -176,9 +176,9 @@ def main():
         ), unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, {BG_CARD}, {BG_HOVER}); 
-                    border-radius: 10px; padding: 1rem; border: 1px dashed rgba(255,255,255,0.2);">
-            <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem; text-align: center;">
+        <div style="background: #f8f9fa; 
+                    border-radius: 10px; padding: 1rem; border: 1px dashed #ccc;">
+            <div style="color: #666; font-size: 0.8rem; text-align: center;">
                 Data refreshed weekly via Snowflake Tasks
             </div>
         </div>
@@ -225,9 +225,9 @@ def main():
     
     with col1:
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; height: 100%; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_ACCENT};">Last-Click Attribution</h4>
-            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+            <p style="color: #555; font-size: 0.9rem;">
                 Credits the final touchpoint before conversion. In B2B, that's often a 
                 salesperson—ignoring the 6 months of marketing that created the opportunity.
             </p>
@@ -236,9 +236,9 @@ def main():
     
     with col2:
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; height: 100%; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_ACCENT};">MTA / Multi-Touch</h4>
-            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+            <p style="color: #555; font-size: 0.9rem;">
                 Requires user-level tracking, which is impossible when 60% of revenue flows 
                 through distributors who never touch your digital properties.
             </p>
@@ -247,9 +247,9 @@ def main():
     
     with col3:
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; height: 100%;">
+        <div style="background: #f0fff4; border-radius: 12px; padding: 1.5rem; height: 100%; border: 1px solid {COLOR_SUCCESS};">
             <h4 style="color: {COLOR_SUCCESS};">Marketing Mix Modeling</h4>
-            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+            <p style="color: #555; font-size: 0.9rem;">
                 Uses <strong>aggregate data</strong> (total spend vs. total revenue) with 
                 statistical regression. Works for long cycles and distributor sales.
             </p>
@@ -261,12 +261,12 @@ def main():
     st.markdown("#### How MMM Connects Spend to Revenue")
     
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, {BG_CARD}, #1e2738); 
-                border-radius: 12px; padding: 2rem; margin: 1rem 0;">
-        <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.7;">
+    <div style="background: #f0f7ff; 
+                border-radius: 12px; padding: 2rem; margin: 1rem 0; border: 1px solid #d0e0f0;">
+        <p style="color: #333; font-size: 1.05rem; line-height: 1.7;">
             Think of it like tracking the <strong>"echo"</strong> of your marketing:
         </p>
-        <ol style="color: rgba(255,255,255,0.8); line-height: 2; padding-left: 1.5rem;">
+        <ol style="color: #444; line-height: 2; padding-left: 1.5rem;">
             <li><strong>Carryover Effect:</strong> A LinkedIn ad today still influences buyers 
                 4-6 weeks later. The model learns how quickly each channel's effect "decays."</li>
             <li><strong>Diminishing Returns:</strong> The first $50K on Google Search is efficient. 
@@ -286,8 +286,8 @@ def main():
         <div style="background: linear-gradient(135deg, {COLOR_PRIMARY}15, {COLOR_SECONDARY}15); 
                     border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 1.25rem; text-align: center;">
             <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
-            <div style="color: white; font-weight: 600;">Unified Attribution</div>
-            <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-weight: 600;">Unified Attribution</div>
+            <div style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">
                 Single ROI per Channel × Region × Product
             </div>
         </div>
@@ -298,8 +298,8 @@ def main():
         <div style="background: linear-gradient(135deg, {COLOR_SUCCESS}15, {COLOR_SUCCESS}08); 
                     border: 1px solid {COLOR_SUCCESS}; border-radius: 12px; padding: 1.25rem; text-align: center;">
             <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
-            <div style="color: white; font-weight: 600;">Confidence Intervals</div>
-            <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-weight: 600;">Confidence Intervals</div>
+            <div style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">
                 "LinkedIn ROI: 3.2x [2.8 - 3.6]"
             </div>
         </div>
@@ -310,8 +310,8 @@ def main():
         <div style="background: linear-gradient(135deg, {COLOR_ACCENT}15, {COLOR_ACCENT}08); 
                     border: 1px solid {COLOR_ACCENT}; border-radius: 12px; padding: 1.25rem; text-align: center;">
             <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
-            <div style="color: white; font-weight: 600;">Marginal ROI</div>
-            <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-weight: 600;">Marginal ROI</div>
+            <div style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">
                 Where should the NEXT dollar go?
             </div>
         </div>
@@ -322,8 +322,8 @@ def main():
         <div style="background: linear-gradient(135deg, {COLOR_WARNING}15, {COLOR_WARNING}08); 
                     border: 1px solid {COLOR_WARNING}; border-radius: 12px; padding: 1.25rem; text-align: center;">
             <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
-            <div style="color: white; font-weight: 600;">What-If Simulation</div>
-            <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-weight: 600;">What-If Simulation</div>
+            <div style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">
                 Predict lift before reallocation
             </div>
         </div>
@@ -346,35 +346,35 @@ def main():
     # Algorithm components table
     st.markdown(f"""
     <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-        <tr style="background: {BG_CARD};">
-            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid rgba(255,255,255,0.1);">Component</th>
-            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid rgba(255,255,255,0.1);">Implementation</th>
-            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid rgba(255,255,255,0.1);">Purpose</th>
+        <tr style="background: #f8f9fa;">
+            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid #e0e0e0;">Component</th>
+            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid #e0e0e0;">Implementation</th>
+            <th style="padding: 0.75rem; text-align: left; color: {COLOR_PRIMARY}; border-bottom: 1px solid #e0e0e0;">Purpose</th>
         </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="padding: 0.75rem; color: white;">Geometric Adstock</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);"><code>x_eff[t] = x[t] + θ·x_eff[t-1]</code></td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">Models carryover effect (θ = decay rate)</td>
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 0.75rem; color: #333;">Geometric Adstock</td>
+            <td style="padding: 0.75rem; color: #555;"><code>x_eff[t] = x[t] + θ·x_eff[t-1]</code></td>
+            <td style="padding: 0.75rem; color: #555;">Models carryover effect (θ = decay rate)</td>
         </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="padding: 0.75rem; color: white;">Hill Saturation</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);"><code>x^α / (x^α + γ^α)</code></td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">Captures diminishing returns (γ = half-saturation)</td>
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 0.75rem; color: #333;">Hill Saturation</td>
+            <td style="padding: 0.75rem; color: #555;"><code>x^α / (x^α + γ^α)</code></td>
+            <td style="padding: 0.75rem; color: #555;">Captures diminishing returns (γ = half-saturation)</td>
         </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="padding: 0.75rem; color: white;">Nevergrad Optimization</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">TwoPointsDE (500 iterations)</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">Finds optimal θ, α, γ per channel</td>
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 0.75rem; color: #333;">Nevergrad Optimization</td>
+            <td style="padding: 0.75rem; color: #555;">TwoPointsDE (500 iterations)</td>
+            <td style="padding: 0.75rem; color: #555;">Finds optimal θ, α, γ per channel</td>
         </tr>
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="padding: 0.75rem; color: white;">Ridge Regression</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">L2 penalty (α=1.0), positive constraints</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">Estimates coefficients with regularization</td>
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 0.75rem; color: #333;">Ridge Regression</td>
+            <td style="padding: 0.75rem; color: #555;">L2 penalty (α=1.0), positive constraints</td>
+            <td style="padding: 0.75rem; color: #555;">Estimates coefficients with regularization</td>
         </tr>
         <tr>
-            <td style="padding: 0.75rem; color: white;">Bootstrap CI</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">100 iterations, 90% percentile</td>
-            <td style="padding: 0.75rem; color: rgba(255,255,255,0.7);">Uncertainty quantification on ROI</td>
+            <td style="padding: 0.75rem; color: #333;">Bootstrap CI</td>
+            <td style="padding: 0.75rem; color: #555;">100 iterations, 90% percentile</td>
+            <td style="padding: 0.75rem; color: #555;">Uncertainty quantification on ROI</td>
         </tr>
     </table>
     """, unsafe_allow_html=True)
@@ -386,43 +386,43 @@ def main():
     with col1:
         st.markdown("#### Training Workflow")
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_PRIMARY}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">1</span>
-                    <span style="color: rgba(255,255,255,0.85);">Load from <code>V_MMM_INPUT_WEEKLY</code></span>
+                    <span style="color: #333;">Load from <code>V_MMM_INPUT_WEEKLY</code></span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_PRIMARY}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">2</span>
-                    <span style="color: rgba(255,255,255,0.85);">Add Fourier seasonality + trend controls</span>
+                    <span style="color: #333;">Add Fourier seasonality + trend controls</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_PRIMARY}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">3</span>
-                    <span style="color: rgba(255,255,255,0.85);">Optimize adstock/saturation params (Nevergrad)</span>
+                    <span style="color: #333;">Optimize adstock/saturation params (Nevergrad)</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_PRIMARY}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">4</span>
-                    <span style="color: rgba(255,255,255,0.85);">Fit Ridge regression with transformed features</span>
+                    <span style="color: #333;">Fit Ridge regression with transformed features</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_PRIMARY}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">5</span>
-                    <span style="color: rgba(255,255,255,0.85);">Bootstrap for 90% confidence intervals</span>
+                    <span style="color: #333;">Bootstrap for 90% confidence intervals</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="background: {COLOR_SUCCESS}; color: white; width: 24px; height: 24px; 
                                  border-radius: 50%; display: flex; align-items: center; justify-content: center; 
                                  font-size: 0.75rem; font-weight: 600;">OK</span>
-                    <span style="color: rgba(255,255,255,0.85);">Write to <code>MMM.MODEL_RESULTS</code></span>
+                    <span style="color: #333;">Write to <code>MMM.MODEL_RESULTS</code></span>
                 </div>
             </div>
         </div>
@@ -431,27 +431,27 @@ def main():
     with col2:
         st.markdown("#### Model Quality Metrics")
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
             <table style="width: 100%;">
                 <tr>
-                    <td style="padding: 0.5rem 0; color: rgba(255,255,255,0.7);">In-Sample R²</td>
-                    <td style="padding: 0.5rem 0; color: white; text-align: right; font-weight: 600;">Target: > 0.85</td>
+                    <td style="padding: 0.5rem 0; color: #555;">In-Sample R²</td>
+                    <td style="padding: 0.5rem 0; color: #333; text-align: right; font-weight: 600;">Target: > 0.85</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem 0; color: rgba(255,255,255,0.7);">CV MAPE</td>
-                    <td style="padding: 0.5rem 0; color: white; text-align: right; font-weight: 600;">Target: &lt; 15%</td>
+                    <td style="padding: 0.5rem 0; color: #555;">CV MAPE</td>
+                    <td style="padding: 0.5rem 0; color: #333; text-align: right; font-weight: 600;">Target: &lt; 15%</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem 0; color: rgba(255,255,255,0.7);">Significant Channels</td>
-                    <td style="padding: 0.5rem 0; color: white; text-align: right; font-weight: 600;">Target: > 60%</td>
+                    <td style="padding: 0.5rem 0; color: #555;">Significant Channels</td>
+                    <td style="padding: 0.5rem 0; color: #333; text-align: right; font-weight: 600;">Target: > 60%</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem 0; color: rgba(255,255,255,0.7);">Training Time</td>
-                    <td style="padding: 0.5rem 0; color: white; text-align: right; font-weight: 600;">~5-10 minutes</td>
+                    <td style="padding: 0.5rem 0; color: #555;">Training Time</td>
+                    <td style="padding: 0.5rem 0; color: #333; text-align: right; font-weight: 600;">~5-10 minutes</td>
                 </tr>
             </table>
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                <div style="color: #666; font-size: 0.8rem;">
                     <strong>Validation:</strong> Time-series CV with 52-week train / 13-week test windows. 
                     Never peeks at future data.
                 </div>
@@ -477,10 +477,10 @@ config = MMMConfig(
     """, language="python")
     
     st.markdown(f"""
-    <div style="background: {BG_CARD}; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+    <div style="background: #f8f9fa; border-radius: 8px; padding: 1rem; margin-top: 1rem; border: 1px solid #e0e0e0;">
         <div style="color: {COLOR_PRIMARY}; font-weight: 600; margin-bottom: 0.5rem;">Notebook Location</div>
-        <code style="color: rgba(255,255,255,0.7);">notebooks/01_mmm_training.ipynb</code>
-        <div style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 0.5rem;">
+        <code style="color: #555;">notebooks/01_mmm_training.ipynb</code>
+        <div style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">
             Runs on Snowflake Notebooks or SPCS with Python 3.11
         </div>
     </div>
@@ -503,38 +503,38 @@ config = MMMConfig(
         """)
         
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; border: 1px solid #e0e0e0;">
             <div style="color: {COLOR_PRIMARY}; font-weight: 600; margin-bottom: 1rem;">Semantic Model Scope</div>
             <div style="margin-bottom: 1rem;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Tables</div>
-                <code style="color: rgba(255,255,255,0.8);">V_MMM_INPUT_WEEKLY</code>, 
-                <code style="color: rgba(255,255,255,0.8);">V_ROI_BY_CHANNEL</code>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Tables</div>
+                <code style="color: #444;">V_MMM_INPUT_WEEKLY</code>, 
+                <code style="color: #444;">V_ROI_BY_CHANNEL</code>
             </div>
             <div style="margin-bottom: 1rem;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Measures</div>
-                <span style="color: rgba(255,255,255,0.8);">Spend, Revenue, ROAS, Impressions, Clicks, PMI, SOV</span>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Measures</div>
+                <span style="color: #444;">Spend, Revenue, ROAS, Impressions, Clicks, PMI, SOV</span>
             </div>
             <div>
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Dimensions</div>
-                <span style="color: rgba(255,255,255,0.8);">Channel, Super-Region, Region, Country, Week</span>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Dimensions</div>
+                <span style="color: #444;">Channel, Super-Region, Region, Country, Week</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("**Sample Questions:**")
         st.markdown(f"""
-        <div style="background: {BG_HOVER}; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
-            <div style="color: rgba(255,255,255,0.9); font-style: italic;">
+        <div style="background: #f5f5f5; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="color: #333; font-style: italic;">
                 "Show me ROAS by business segment for APAC"
             </div>
         </div>
-        <div style="background: {BG_HOVER}; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
-            <div style="color: rgba(255,255,255,0.9); font-style: italic;">
+        <div style="background: #f5f5f5; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="color: #333; font-style: italic;">
                 "Compare LinkedIn vs Google ROAS for Germany"
             </div>
         </div>
-        <div style="background: {BG_HOVER}; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
-            <div style="color: rgba(255,255,255,0.9); font-style: italic;">
+        <div style="background: #f5f5f5; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="color: #333; font-style: italic;">
                 "What's the marginal ROI by channel for Western Europe?"
             </div>
         </div>
@@ -548,32 +548,32 @@ config = MMMConfig(
         """)
         
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; border: 1px solid #e0e0e0;">
             <div style="color: {COLOR_PRIMARY}; font-weight: 600; margin-bottom: 1rem;">Document Index</div>
             <div style="margin-bottom: 1rem;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Service</div>
-                <code style="color: rgba(255,255,255,0.8);">MARKETING_KNOWLEDGE_BASE</code>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Service</div>
+                <code style="color: #444;">MARKETING_KNOWLEDGE_BASE</code>
             </div>
             <div style="margin-bottom: 1rem;">
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Content</div>
-                <span style="color: rgba(255,255,255,0.8);">Campaign Briefs, Creative Strategy Decks, Competitor Analysis</span>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Content</div>
+                <span style="color: #444;">Campaign Briefs, Creative Strategy Decks, Competitor Analysis</span>
             </div>
             <div>
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase;">Indexed By</div>
-                <span style="color: rgba(255,255,255,0.8);">Campaign ID, Product Category, Region</span>
+                <div style="color: #666; font-size: 0.75rem; text-transform: uppercase;">Indexed By</div>
+                <span style="color: #444;">Campaign ID, Product Category, Region</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("**Sample Questions:**")
         st.markdown(f"""
-        <div style="background: {BG_HOVER}; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
-            <div style="color: rgba(255,255,255,0.9); font-style: italic;">
+        <div style="background: #f5f5f5; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="color: #333; font-style: italic;">
                 "What was the messaging hook for the Science of Safety campaign?"
             </div>
         </div>
-        <div style="background: {BG_HOVER}; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
-            <div style="color: rgba(255,255,255,0.9); font-style: italic;">
+        <div style="background: #f5f5f5; border-radius: 8px; padding: 1rem; margin: 0.5rem 0;">
+            <div style="color: #333; font-style: italic;">
                 "Summarize creative strategy for top LinkedIn campaigns"
             </div>
         </div>
@@ -590,26 +590,26 @@ config = MMMConfig(
     
     with col1:
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Strategic Dashboard</h4>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
+            <p style="color: #555; margin-bottom: 0.5rem;">
                 Unified view of ROI across all business units with revenue attribution, 
                 regional heatmaps, and actionable recommendations.
             </p>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+            <p style="color: #777; font-size: 0.85rem;">
                 <em>Persona: CMO / VP Marketing</em>
             </p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Model Explorer</h4>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
+            <p style="color: #555; margin-bottom: 0.5rem;">
                 Deep-dive into response curves, confidence intervals, and ad-hoc 
                 analysis via the Cortex Analyst chat interface.
             </p>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+            <p style="color: #777; font-size: 0.85rem;">
                 <em>Persona: Data Scientist / Marketing Analyst</em>
             </p>
         </div>
@@ -617,26 +617,26 @@ config = MMMConfig(
     
     with col2:
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">Budget Simulator</h4>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
+            <p style="color: #555; margin-bottom: 0.5rem;">
                 "What-if" scenario modeling—adjust sliders to simulate budget reallocation 
                 and see predicted revenue impact in real-time.
             </p>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+            <p style="color: #777; font-size: 0.85rem;">
                 <em>Persona: Regional Demand Gen Lead</em>
             </p>
         </div>
         """, unsafe_allow_html=True)
     
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
             <h4 style="color: {COLOR_PRIMARY}; margin-bottom: 0.75rem;">About</h4>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">
+            <p style="color: #555; margin-bottom: 0.5rem;">
                 Project documentation for business and technical audiences 
                 (you are here).
             </p>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+            <p style="color: #777; font-size: 0.85rem;">
                 <em>Persona: All Users</em>
             </p>
         </div>
@@ -656,10 +656,10 @@ config = MMMConfig(
         <div style="background: linear-gradient(135deg, {COLOR_PRIMARY}22, {COLOR_SECONDARY}22); 
                     border: 1px solid {COLOR_PRIMARY}; border-radius: 12px; padding: 2rem; text-align: center;">
             <div style="font-size: 3rem; font-weight: 700; color: {COLOR_PRIMARY};">15%</div>
-            <div style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-size: 1.1rem; margin-top: 0.5rem;">
                 Improvement in Marketing Efficiency Ratio
             </div>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 1rem;">
+            <p style="color: #666; font-size: 0.85rem; margin-top: 1rem;">
                 Revenue generated per dollar of marketing spend through algorithmic budget reallocation
             </p>
         </div>
@@ -670,10 +670,10 @@ config = MMMConfig(
         <div style="background: linear-gradient(135deg, {COLOR_ACCENT}22, {COLOR_ACCENT}11); 
                     border: 1px solid {COLOR_ACCENT}; border-radius: 12px; padding: 2rem; text-align: center;">
             <div style="font-size: 3rem; font-weight: 700; color: {COLOR_ACCENT};">2x</div>
-            <div style="color: white; font-size: 1.1rem; margin-top: 0.5rem;">
+            <div style="color: #333; font-size: 1.1rem; margin-top: 0.5rem;">
                 Faster Budget Decision Cycles
             </div>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 1rem;">
+            <p style="color: #666; font-size: 0.85rem; margin-top: 1rem;">
                 From quarterly planning cycles to real-time simulation and optimization
             </p>
         </div>
@@ -699,9 +699,9 @@ config = MMMConfig(
     for i, (tech, desc) in enumerate(tech_items):
         with cols[i % 3]:
             st.markdown(f"""
-            <div style="background: {BG_CARD}; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-                <div style="color: white; font-weight: 600;">{tech}</div>
-                <div style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">{desc}</div>
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid #e0e0e0;">
+                <div style="color: #333; font-weight: 600;">{tech}</div>
+                <div style="color: #666; font-size: 0.85rem;">{desc}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -717,8 +717,8 @@ config = MMMConfig(
     with col1:
         st.markdown("### Quick Start Guide")
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
-            <ol style="color: rgba(255,255,255,0.85); line-height: 2; padding-left: 1.25rem; margin: 0;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
+            <ol style="color: #333; line-height: 2; padding-left: 1.25rem; margin: 0;">
                 <li>Start with the <strong>Strategic Dashboard</strong> for an executive overview</li>
                 <li>Use filters to drill down by region, product, or channel</li>
                 <li>Go to <strong>Budget Simulator</strong> to test "what-if" scenarios</li>
@@ -731,22 +731,22 @@ config = MMMConfig(
     with col2:
         st.markdown("### Interpreting Results")
         st.markdown(f"""
-        <div style="background: {BG_CARD}; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0;">
             <div style="margin-bottom: 1rem;">
                 <div style="color: {COLOR_PRIMARY}; font-weight: 600;">ROI with Confidence Interval</div>
-                <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                <div style="color: #555; font-size: 0.9rem;">
                     "3.2x [2.8 - 3.6]" means we're 90% confident the true ROI is between 2.8x and 3.6x.
                 </div>
             </div>
             <div style="margin-bottom: 1rem;">
                 <div style="color: {COLOR_SUCCESS}; font-weight: 600;">Significant</div>
-                <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                <div style="color: #555; font-size: 0.9rem;">
                     The entire CI is above zero—statistically reliable.
                 </div>
             </div>
             <div>
                 <div style="color: {COLOR_ACCENT}; font-weight: 600;">Marginal ROI</div>
-                <div style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                <div style="color: #555; font-size: 0.9rem;">
                     Return on the <em>next</em> dollar—use this for reallocation decisions.
                 </div>
             </div>
@@ -761,21 +761,21 @@ config = MMMConfig(
     st.markdown("## The Demo \"Wow\" Moment")
     
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, {BG_CARD}, #1e2738); 
+    <div style="background: #f0f7ff; 
                 border-radius: 12px; padding: 2rem; margin: 1rem 0; border: 1px solid rgba(41, 181, 232, 0.3);">
-        <p style="color: rgba(255,255,255,0.7); font-style: italic; font-size: 1.1rem;">
+        <p style="color: #555; font-style: italic; font-size: 1.1rem;">
             The CMO asks the Cortex Analyst:
         </p>
-        <p style="color: white; font-size: 1.2rem; margin: 1rem 0; padding-left: 1rem; border-left: 3px solid {COLOR_PRIMARY};">
+        <p style="color: #333; font-size: 1.2rem; margin: 1rem 0; padding-left: 1rem; border-left: 3px solid {COLOR_PRIMARY};">
             "How should we reallocate our Q3 budget to maximize industrial distributor sales in APAC?"
         </p>
-        <p style="color: rgba(255,255,255,0.7); margin-top: 1rem;">
+        <p style="color: #555; margin-top: 1rem;">
             The system instantly parses the underlying MMM results and generates:
         </p>
         <p style="color: {COLOR_ACCENT}; font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem;">
             "Shift $500K from Programmatic Display to LinkedIn Video for a projected $2.4M revenue lift"
         </p>
-        <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 1rem;">
+        <p style="color: #777; font-size: 0.9rem; margin-top: 1rem;">
             — displayed alongside an interactive saturation curve showing exactly where each channel sits on its diminishing returns curve
         </p>
     </div>
@@ -786,8 +786,8 @@ config = MMMConfig(
     # =========================================================================
     st.divider()
     
-    st.markdown(f"""
-    <div style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.4);">
+    st.markdown("""
+    <div style="text-align: center; padding: 2rem; color: #888;">
         <p style="font-size: 0.85rem;">
             Built with Snowflake • Snowpark ML • Cortex AI • Streamlit
         </p>

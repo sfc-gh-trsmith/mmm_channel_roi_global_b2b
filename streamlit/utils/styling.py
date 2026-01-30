@@ -1,21 +1,29 @@
 """
 Enforced visual styling for the MMM ROI Engine.
 Ensures brand consistency regardless of user system theme.
+
+LIGHT MODE THEME - Clean, professional appearance for demos.
 """
 import streamlit as st
 
 # Brand Color Palette
-COLOR_PRIMARY = "#29B5E8"      # Cyan accent
+COLOR_PRIMARY = "#0068C9"      # Snowflake blue
 COLOR_SECONDARY = "#11567F"    # Deep blue
 COLOR_ACCENT = "#D95F02"       # Orange highlight
-COLOR_SUCCESS = "#2ECC71"      # Green for positive metrics
+COLOR_SUCCESS = "#28A745"      # Green for positive metrics
 COLOR_WARNING = "#F39C12"      # Amber for caution
-COLOR_DANGER = "#E74C3C"       # Red for negative metrics
+COLOR_DANGER = "#DC3545"       # Red for negative metrics
 
-# Background colors
-BG_DARK = "#0E1117"
-BG_CARD = "#1a1f2e"
-BG_HOVER = "#252d3d"
+# Background colors (Light Mode)
+BG_LIGHT = "#FFFFFF"
+BG_CARD = "#F8F9FA"
+BG_HOVER = "#E9ECEF"
+BG_SIDEBAR = "#F1F3F4"
+
+# Text colors
+TEXT_PRIMARY = "#1F2937"       # Dark gray for main text
+TEXT_SECONDARY = "#6B7280"     # Medium gray for secondary text
+TEXT_MUTED = "#9CA3AF"         # Light gray for muted text
 
 # Typography
 FONT_DISPLAY = "'Instrument Sans', 'DM Sans', sans-serif"
@@ -25,31 +33,33 @@ FONT_MONO = "'JetBrains Mono', 'Fira Code', monospace"
 
 def inject_custom_css():
     """
-    Inject brand-consistent CSS regardless of user system theme.
+    Inject brand-consistent CSS with LIGHT MODE theme.
     Call this at the top of every page.
     """
     st.markdown(f'''
     <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
     
-    /* ===== ROOT THEME OVERRIDE ===== */
+    /* ===== ROOT THEME OVERRIDE - LIGHT MODE ===== */
     .stApp {{
-        background: linear-gradient(165deg, {BG_DARK} 0%, {BG_CARD} 50%, #0d1520 100%);
+        background: linear-gradient(165deg, {BG_LIGHT} 0%, {BG_CARD} 100%);
     }}
     
     /* ===== TYPOGRAPHY ===== */
     html, body, [class*="css"] {{
         font-family: {FONT_BODY};
+        color: {TEXT_PRIMARY};
     }}
     
     h1, h2, h3 {{
         font-family: {FONT_DISPLAY};
         font-weight: 700;
         letter-spacing: -0.02em;
+        color: {TEXT_PRIMARY};
     }}
     
     h1 {{
-        background: linear-gradient(135deg, {COLOR_PRIMARY} 0%, #7DD3FC 100%);
+        background: linear-gradient(135deg, {COLOR_PRIMARY} 0%, {COLOR_SECONDARY} 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -61,21 +71,21 @@ def inject_custom_css():
     
     /* ===== METRIC CARDS ===== */
     [data-testid="stMetric"] {{
-        background: linear-gradient(145deg, {BG_CARD} 0%, {BG_HOVER} 100%);
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        background: {BG_LIGHT};
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
         padding: 1rem 1.25rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }}
     
     [data-testid="stMetricValue"] {{
         font-family: {FONT_DISPLAY};
         font-weight: 700;
-        color: #ffffff;
+        color: {TEXT_PRIMARY};
     }}
     
     [data-testid="stMetricLabel"] {{
-        color: rgba(255, 255, 255, 0.7);
+        color: {TEXT_SECONDARY};
         font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -91,12 +101,13 @@ def inject_custom_css():
         background: {BG_CARD};
         padding: 0.5rem;
         border-radius: 12px;
+        border: 1px solid #E5E7EB;
     }}
     
     .stTabs [data-baseweb="tab"] {{
         background: transparent;
         border-radius: 8px;
-        color: rgba(255, 255, 255, 0.6);
+        color: {TEXT_SECONDARY};
         font-weight: 500;
         padding: 0.5rem 1rem;
         transition: all 0.2s ease;
@@ -104,7 +115,7 @@ def inject_custom_css():
     
     .stTabs [data-baseweb="tab"]:hover {{
         color: {COLOR_PRIMARY};
-        background: rgba(41, 181, 232, 0.1);
+        background: rgba(0, 104, 201, 0.08);
     }}
     
     .stTabs [aria-selected="true"] {{
@@ -121,19 +132,19 @@ def inject_custom_css():
         font-weight: 600;
         padding: 0.5rem 1.5rem;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(41, 181, 232, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 104, 201, 0.25);
     }}
     
     .stButton > button:hover {{
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(41, 181, 232, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 104, 201, 0.35);
     }}
     
     /* ===== SEGMENTED CONTROL ===== */
     .segmented-control {{
         display: inline-flex;
         background: {BG_CARD};
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
         padding: 4px;
         gap: 0;
@@ -143,7 +154,7 @@ def inject_custom_css():
         padding: 0.5rem 1rem;
         border: none;
         background: transparent;
-        color: rgba(255, 255, 255, 0.6);
+        color: {TEXT_SECONDARY};
         font-family: {FONT_BODY};
         font-size: 0.9rem;
         font-weight: 500;
@@ -155,14 +166,14 @@ def inject_custom_css():
     
     .segmented-control .seg-btn:hover {{
         color: {COLOR_PRIMARY};
-        background: rgba(41, 181, 232, 0.1);
+        background: rgba(0, 104, 201, 0.08);
     }}
     
     .segmented-control .seg-btn.active {{
         background: linear-gradient(135deg, {COLOR_PRIMARY} 0%, {COLOR_SECONDARY} 100%);
         color: white;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(41, 181, 232, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 104, 201, 0.25);
     }}
     
     .segmented-control .seg-btn .roi-badge {{
@@ -187,17 +198,17 @@ def inject_custom_css():
     
     /* ===== SIDEBAR ===== */
     [data-testid="stSidebar"] {{
-        background: linear-gradient(180deg, {BG_CARD} 0%, {BG_DARK} 100%) !important;
-        border-right: 1px solid rgba(41, 181, 232, 0.15);
+        background: {BG_SIDEBAR} !important;
+        border-right: 1px solid #E5E7EB;
     }}
     
     [data-testid="stSidebar"] [data-testid="stMarkdown"] {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
     }}
     
     /* Sidebar navigation links */
     [data-testid="stSidebar"] a {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
         text-decoration: none;
     }}
     
@@ -207,16 +218,16 @@ def inject_custom_css():
     
     /* Sidebar navigation list items */
     [data-testid="stSidebar"] li {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
     }}
     
     [data-testid="stSidebar"] .stPageLink {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
     }}
     
     [data-testid="stSidebar"] .stPageLink:hover {{
         color: {COLOR_PRIMARY} !important;
-        background: rgba(41, 181, 232, 0.1) !important;
+        background: rgba(0, 104, 201, 0.08) !important;
     }}
     
     /* Sidebar page link text - Streamlit 1.x specific */
@@ -225,11 +236,11 @@ def inject_custom_css():
     }}
     
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] span {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
     }}
     
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] a {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
         padding: 0.5rem 0.75rem;
         border-radius: 8px;
         transition: all 0.2s ease;
@@ -237,30 +248,30 @@ def inject_custom_css():
     
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] a:hover {{
         color: {COLOR_PRIMARY} !important;
-        background: rgba(41, 181, 232, 0.15) !important;
+        background: rgba(0, 104, 201, 0.08) !important;
     }}
     
     [data-testid="stSidebar"] [data-testid="stSidebarNav"] a[aria-current="page"] {{
-        background: linear-gradient(135deg, rgba(41, 181, 232, 0.2) 0%, rgba(17, 86, 127, 0.2) 100%) !important;
+        background: rgba(0, 104, 201, 0.12) !important;
         color: {COLOR_PRIMARY} !important;
         font-weight: 600;
         border-left: 3px solid {COLOR_PRIMARY};
     }}
     
-    /* Force all sidebar text to be light */
+    /* Force all sidebar text to be dark */
     [data-testid="stSidebar"] p,
     [data-testid="stSidebar"] span,
     [data-testid="stSidebar"] label,
     [data-testid="stSidebar"] div {{
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: {TEXT_PRIMARY} !important;
     }}
     
     /* Sidebar title/header */
     [data-testid="stSidebar"] h1,
     [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3 {{
-        color: white !important;
-        -webkit-text-fill-color: white !important;
+        color: {TEXT_PRIMARY} !important;
+        -webkit-text-fill-color: {TEXT_PRIMARY} !important;
         background: none !important;
     }}
     
@@ -271,7 +282,7 @@ def inject_custom_css():
     
     /* Sidebar collapse button */
     [data-testid="stSidebar"] button {{
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: {TEXT_SECONDARY} !important;
     }}
     
     [data-testid="stSidebar"] button:hover {{
@@ -282,7 +293,7 @@ def inject_custom_css():
     .streamlit-expanderHeader {{
         background: {BG_CARD};
         border-radius: 8px;
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        border: 1px solid #E5E7EB;
     }}
     
     /* ===== SLIDERS ===== */
@@ -292,13 +303,13 @@ def inject_custom_css():
     
     .stSlider > div > div > div > div {{
         background: {COLOR_PRIMARY};
-        box-shadow: 0 0 10px rgba(41, 181, 232, 0.5);
+        box-shadow: 0 0 8px rgba(0, 104, 201, 0.4);
     }}
     
     /* ===== SELECTBOX ===== */
     .stSelectbox > div > div {{
-        background: {BG_CARD};
-        border: 1px solid rgba(41, 181, 232, 0.3);
+        background: {BG_LIGHT};
+        border: 1px solid #E5E7EB;
         border-radius: 8px;
     }}
     
@@ -306,6 +317,7 @@ def inject_custom_css():
     .stDataFrame {{
         border-radius: 12px;
         overflow: hidden;
+        border: 1px solid #E5E7EB;
     }}
     
     /* ===== PLOTLY CHARTS ===== */
@@ -315,15 +327,15 @@ def inject_custom_css():
     
     /* ===== CHAT INPUT ===== */
     .stChatInput > div {{
-        background: {BG_CARD};
-        border: 1px solid rgba(41, 181, 232, 0.3);
+        background: {BG_LIGHT};
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
     }}
     
     /* ===== PERSONA CARDS ===== */
     .persona-card {{
-        background: linear-gradient(145deg, {BG_CARD} 0%, {BG_HOVER} 100%);
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        background: {BG_LIGHT};
+        border: 1px solid #E5E7EB;
         border-top: 4px solid {COLOR_PRIMARY};
         border-radius: 16px;
         padding: 2rem;
@@ -336,14 +348,14 @@ def inject_custom_css():
     .persona-card:hover {{
         border-color: {COLOR_PRIMARY};
         transform: translateY(-4px);
-        box-shadow: 0 12px 40px rgba(41, 181, 232, 0.2);
+        box-shadow: 0 8px 24px rgba(0, 104, 201, 0.15);
     }}
     
     .persona-title {{
         font-family: {FONT_DISPLAY};
         font-size: 1.4rem;
         font-weight: 700;
-        color: white;
+        color: {TEXT_PRIMARY};
         margin-bottom: 0.5rem;
     }}
     
@@ -355,7 +367,7 @@ def inject_custom_css():
     }}
     
     .persona-description {{
-        color: rgba(255, 255, 255, 0.6);
+        color: {TEXT_SECONDARY};
         font-size: 0.9rem;
         line-height: 1.5;
     }}
@@ -380,7 +392,7 @@ def inject_custom_css():
     
     /* ===== INSIGHT CALLOUT ===== */
     .insight-callout {{
-        background: linear-gradient(135deg, rgba(41, 181, 232, 0.15) 0%, rgba(17, 86, 127, 0.15) 100%);
+        background: rgba(0, 104, 201, 0.06);
         border: 1px solid {COLOR_PRIMARY};
         border-radius: 12px;
         padding: 1.5rem;
@@ -398,7 +410,8 @@ def inject_custom_css():
         justify-content: center;
         gap: 3rem;
         padding: 1rem;
-        background: rgba(0, 0, 0, 0.2);
+        background: {BG_CARD};
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
         margin-top: 2rem;
     }}
@@ -411,11 +424,11 @@ def inject_custom_css():
         font-family: {FONT_DISPLAY};
         font-size: 1.5rem;
         font-weight: 700;
-        color: white;
+        color: {TEXT_PRIMARY};
     }}
     
     .quick-stat-label {{
-        color: rgba(255, 255, 255, 0.5);
+        color: {TEXT_SECONDARY};
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -428,8 +441,8 @@ def inject_custom_css():
     
     /* ===== LEARN MORE PANELS ===== */
     .learn-more-panel {{
-        background: linear-gradient(145deg, rgba(26, 31, 46, 0.8) 0%, rgba(37, 45, 61, 0.6) 100%);
-        border: 1px solid rgba(41, 181, 232, 0.15);
+        background: {BG_CARD};
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
         padding: 1.25rem;
         margin: 1rem 0;
@@ -446,19 +459,19 @@ def inject_custom_css():
     }}
     
     .learn-more-content {{
-        color: rgba(255, 255, 255, 0.75);
+        color: {TEXT_SECONDARY};
         font-size: 0.9rem;
         line-height: 1.6;
     }}
     
     .learn-more-content strong {{
-        color: white;
+        color: {TEXT_PRIMARY};
     }}
     
     /* ===== CONFIDENCE METRIC CARDS ===== */
     .confidence-metric {{
-        background: linear-gradient(145deg, {BG_CARD} 0%, {BG_HOVER} 100%);
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        background: {BG_LIGHT};
+        border: 1px solid #E5E7EB;
         border-radius: 12px;
         padding: 1rem 1.25rem;
         text-align: center;
@@ -468,18 +481,18 @@ def inject_custom_css():
         font-family: {FONT_DISPLAY};
         font-size: 1.8rem;
         font-weight: 700;
-        color: white;
+        color: {TEXT_PRIMARY};
     }}
     
     .confidence-range {{
         font-family: {FONT_MONO};
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.5);
+        color: {TEXT_SECONDARY};
         margin-top: 0.25rem;
     }}
     
     .confidence-label {{
-        color: rgba(255, 255, 255, 0.6);
+        color: {TEXT_SECONDARY};
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -498,21 +511,21 @@ def inject_custom_css():
     }}
     
     .significance-badge.significant {{
-        background: rgba(46, 204, 113, 0.2);
+        background: rgba(40, 167, 69, 0.12);
         color: {COLOR_SUCCESS};
-        border: 1px solid rgba(46, 204, 113, 0.3);
+        border: 1px solid rgba(40, 167, 69, 0.25);
     }}
     
     .significance-badge.uncertain {{
-        background: rgba(243, 156, 18, 0.2);
+        background: rgba(243, 156, 18, 0.12);
         color: {COLOR_WARNING};
-        border: 1px solid rgba(243, 156, 18, 0.3);
+        border: 1px solid rgba(243, 156, 18, 0.25);
     }}
     
     .significance-badge.negative {{
-        background: rgba(231, 76, 60, 0.2);
+        background: rgba(220, 53, 69, 0.12);
         color: {COLOR_DANGER};
-        border: 1px solid rgba(231, 76, 60, 0.3);
+        border: 1px solid rgba(220, 53, 69, 0.25);
     }}
     
     /* ===== EFFICIENCY ZONES ===== */
@@ -528,17 +541,17 @@ def inject_custom_css():
     }}
     
     .zone-badge.efficient {{
-        background: rgba(46, 204, 113, 0.15);
+        background: rgba(40, 167, 69, 0.12);
         color: {COLOR_SUCCESS};
     }}
     
     .zone-badge.diminishing {{
-        background: rgba(243, 156, 18, 0.15);
+        background: rgba(243, 156, 18, 0.12);
         color: {COLOR_WARNING};
     }}
     
     .zone-badge.saturated {{
-        background: rgba(231, 76, 60, 0.15);
+        background: rgba(220, 53, 69, 0.12);
         color: {COLOR_DANGER};
     }}
     
@@ -562,16 +575,16 @@ def inject_custom_css():
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
-        background: rgba(41, 181, 232, 0.1);
-        border: 1px solid rgba(41, 181, 232, 0.2);
+        background: rgba(0, 104, 201, 0.08);
+        border: 1px solid rgba(0, 104, 201, 0.2);
         border-radius: 6px;
         padding: 0.2rem 0.5rem;
         font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.7);
+        color: {TEXT_SECONDARY};
     }}
     
     .param-pill .param-name {{
-        color: rgba(255, 255, 255, 0.5);
+        color: {TEXT_MUTED};
     }}
     
     .param-pill .param-value {{
@@ -581,7 +594,7 @@ def inject_custom_css():
     
     /* ===== RECOMMENDATION CARD ===== */
     .recommendation-card {{
-        background: linear-gradient(135deg, rgba(41, 181, 232, 0.1) 0%, rgba(17, 86, 127, 0.1) 100%);
+        background: rgba(0, 104, 201, 0.04);
         border: 1px solid {COLOR_PRIMARY};
         border-radius: 12px;
         padding: 1.5rem;
@@ -590,12 +603,12 @@ def inject_custom_css():
     
     .recommendation-card.high-confidence {{
         border-color: {COLOR_SUCCESS};
-        background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.05) 100%);
+        background: rgba(40, 167, 69, 0.04);
     }}
     
     .recommendation-card.uncertain {{
         border-color: {COLOR_WARNING};
-        background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%);
+        background: rgba(243, 156, 18, 0.04);
     }}
     
     .recommendation-header {{
@@ -607,7 +620,49 @@ def inject_custom_css():
     
     .recommendation-title {{
         font-weight: 600;
-        color: white;
+        color: {TEXT_PRIMARY};
+    }}
+    
+    /* ===== PRIORITY ACTION CARDS (LIGHT MODE) ===== */
+    .priority-action-card {{
+        background: rgba(0, 104, 201, 0.08);
+        border: 1px solid rgba(0, 104, 201, 0.25);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+    }}
+    
+    .priority-action-card .badge {{
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }}
+    
+    .priority-action-card .channel-name {{
+        font-weight: 600;
+        color: {TEXT_PRIMARY};
+        margin-bottom: 0.25rem;
+    }}
+    
+    .priority-action-card .metric-value {{
+        font-size: 1.5rem;
+        color: {COLOR_PRIMARY};
+        font-weight: 700;
+    }}
+    
+    .priority-action-card .metric-label {{
+        font-size: 0.8rem;
+        color: {TEXT_SECONDARY};
+    }}
+    
+    .priority-action-card .spend-info {{
+        font-size: 0.75rem;
+        color: {TEXT_MUTED};
+    }}
+    
+    .priority-action-card .action-text {{
+        font-size: 0.9rem;
+        color: {TEXT_SECONDARY};
+        margin-top: 0.5rem;
     }}
     </style>
     ''', unsafe_allow_html=True)
@@ -660,29 +715,29 @@ def render_quick_stats(stats: list) -> str:
 
 
 def get_plotly_template():
-    """Return a consistent Plotly template matching our brand."""
+    """Return a consistent Plotly template matching our brand (LIGHT MODE)."""
     return {
         'layout': {
             'paper_bgcolor': 'rgba(0,0,0,0)',
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'font': {
                 'family': FONT_BODY,
-                'color': 'rgba(255,255,255,0.85)'
+                'color': TEXT_PRIMARY
             },
             'title': {
                 'font': {
                     'family': FONT_DISPLAY,
                     'size': 18,
-                    'color': 'white'
+                    'color': TEXT_PRIMARY
                 }
             },
             'xaxis': {
-                'gridcolor': 'rgba(255,255,255,0.1)',
-                'zerolinecolor': 'rgba(255,255,255,0.2)'
+                'gridcolor': 'rgba(0,0,0,0.08)',
+                'zerolinecolor': 'rgba(0,0,0,0.15)'
             },
             'yaxis': {
-                'gridcolor': 'rgba(255,255,255,0.1)',
-                'zerolinecolor': 'rgba(255,255,255,0.2)'
+                'gridcolor': 'rgba(0,0,0,0.08)',
+                'zerolinecolor': 'rgba(0,0,0,0.15)'
             },
             'colorway': [COLOR_PRIMARY, COLOR_ACCENT, COLOR_SUCCESS, COLOR_WARNING, '#9B59B6', '#1ABC9C']
         }
@@ -690,30 +745,30 @@ def get_plotly_template():
 
 
 def apply_plotly_theme(fig):
-    """Apply our brand theme to a Plotly figure."""
+    """Apply our brand theme to a Plotly figure (LIGHT MODE)."""
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font=dict(
             family=FONT_BODY,
-            color='rgba(255,255,255,0.85)'
+            color=TEXT_PRIMARY
         ),
         title_font=dict(
             family=FONT_DISPLAY,
             size=18,
-            color='white'
+            color=TEXT_PRIMARY
         ),
         xaxis=dict(
-            gridcolor='rgba(255,255,255,0.1)',
-            zerolinecolor='rgba(255,255,255,0.2)'
+            gridcolor='rgba(0,0,0,0.08)',
+            zerolinecolor='rgba(0,0,0,0.15)'
         ),
         yaxis=dict(
-            gridcolor='rgba(255,255,255,0.1)',
-            zerolinecolor='rgba(255,255,255,0.2)'
+            gridcolor='rgba(0,0,0,0.08)',
+            zerolinecolor='rgba(0,0,0,0.15)'
         ),
         legend=dict(
             bgcolor='rgba(0,0,0,0)',
-            font=dict(color='rgba(255,255,255,0.7)')
+            font=dict(color=TEXT_SECONDARY)
         )
     )
     return fig
@@ -849,7 +904,7 @@ def render_recommendation_card(title: str, content: str, confidence: str = "medi
             <span class="recommendation-title">{title}</span>
             {confidence_badge}
         </div>
-        <div style="color: rgba(255,255,255,0.8);">{content}</div>
+        <div style="color: {TEXT_SECONDARY};">{content}</div>
         {lift_html}
     </div>
     '''
@@ -872,7 +927,7 @@ def add_error_bars_to_bar_chart(fig, ci_lower_values: list, ci_upper_values: lis
             type='data',
             array=error_plus,
             arrayminus=error_minus,
-            color='rgba(255, 255, 255, 0.4)',
+            color='rgba(0, 0, 0, 0.3)',
             thickness=1.5,
             width=4
         )
@@ -897,7 +952,7 @@ def add_confidence_band_to_line_chart(fig, x_values: list, y_lower: list,
         x=x_band,
         y=y_band,
         fill='toself',
-        fillcolor='rgba(41, 181, 232, 0.15)',
+        fillcolor='rgba(0, 104, 201, 0.12)',
         line=dict(width=0),
         name=name,
         showlegend=True,
@@ -907,46 +962,65 @@ def add_confidence_band_to_line_chart(fig, x_values: list, y_lower: list,
 
 
 def add_saturation_zone_annotation(fig, gamma: float, max_spend: float, 
-                                    y_range: tuple = None):
+                                    y_range: tuple = None, alpha: float = 2.5):
     """
-    Add vertical line and shaded zone annotation for saturation point.
+    Add zone annotations based on position relative to gamma (half-saturation point).
     
-    gamma: Half-saturation spend level (from Hill function)
-    Shows where diminishing returns become significant.
+    For the Hill function x^α / (x^α + γ^α):
+    - At x = γ, response = 50% of maximum and slope is steepest
+    - Before γ: accelerating returns (but response still growing fast)
+    - After γ: diminishing returns
+    - Well beyond γ: saturation (curve nearly flat)
+    
+    Zone logic:
+    - High Efficiency (GREEN): 0 to 0.5*γ - strong growth region
+    - Diminishing Returns (YELLOW): 0.5*γ to 1.5*γ - still valuable but slowing
+    - Saturation (RED): beyond 1.5*γ - minimal incremental gain
     """
-    # Add vertical line at gamma (half-saturation)
-    fig.add_vline(
-        x=gamma,
-        line=dict(color=COLOR_WARNING, width=2, dash='dash'),
-        annotation_text="Half-Saturation",
-        annotation_position="top right",
-        annotation_font=dict(color=COLOR_WARNING, size=10)
+    diminishing_start = gamma * 0.5
+    saturation_start = gamma * 1.5
+    
+    fig.add_vrect(
+        x0=0,
+        x1=diminishing_start,
+        fillcolor="rgba(40, 167, 69, 0.12)",
+        layer="below",
+        line_width=0,
+        annotation_text="High Efficiency",
+        annotation_position="top left",
+        annotation_font=dict(color=COLOR_SUCCESS, size=10)
     )
     
-    # Add shaded "saturation zone" from 2*gamma onwards
-    saturation_start = gamma * 2
+    if diminishing_start < saturation_start:
+        fig.add_vrect(
+            x0=diminishing_start,
+            x1=min(saturation_start, max_spend),
+            fillcolor="rgba(243, 156, 18, 0.10)",
+            layer="below",
+            line_width=0,
+            annotation_text="Diminishing Returns",
+            annotation_position="top left",
+            annotation_font=dict(color=COLOR_WARNING, size=10)
+        )
+    
     if saturation_start < max_spend:
         fig.add_vrect(
             x0=saturation_start,
             x1=max_spend,
-            fillcolor="rgba(231, 76, 60, 0.1)",
+            fillcolor="rgba(220, 53, 69, 0.12)",
             layer="below",
             line_width=0,
-            annotation_text="Saturation Zone",
+            annotation_text="Saturation",
             annotation_position="top left",
-            annotation_font=dict(color=COLOR_DANGER, size=9)
+            annotation_font=dict(color=COLOR_DANGER, size=10)
         )
     
-    # Add "efficient zone" shading from 0 to gamma
-    fig.add_vrect(
-        x0=0,
-        x1=gamma,
-        fillcolor="rgba(46, 204, 113, 0.08)",
-        layer="below",
-        line_width=0,
-        annotation_text="Efficient Zone",
-        annotation_position="top left",
-        annotation_font=dict(color=COLOR_SUCCESS, size=9)
+    fig.add_vline(
+        x=gamma,
+        line=dict(color=COLOR_WARNING, width=2, dash='dash'),
+        annotation_text="γ (50% Response)",
+        annotation_position="top right",
+        annotation_font=dict(color=COLOR_WARNING, size=10)
     )
     
     return fig
@@ -960,6 +1034,29 @@ def format_ci_string(value: float, ci_lower: float, ci_upper: float,
     Example: format_ci_string(2.3, 1.9, 2.7) -> "2.30x [1.90 - 2.70]"
     """
     return f"{prefix}{value:.{precision}f}{suffix} [{ci_lower:.{precision}f} - {ci_upper:.{precision}f}]"
+
+
+def render_priority_action_card(channel: str, marginal_roi: float, spend: float,
+                                 is_significant: bool = True) -> str:
+    """
+    Generate HTML for a priority action card (LIGHT MODE optimized).
+    
+    Use for displaying top recommended channels to invest in.
+    """
+    badge_text = "[High Confidence]" if is_significant else "[Uncertain]"
+    badge_color = COLOR_SUCCESS if is_significant else COLOR_WARNING
+    spend_label = f"${spend/1e6:.0f}M spend" if spend >= 1e6 else f"${spend/1e3:.0f}K spend"
+    
+    return f'''
+    <div class="priority-action-card">
+        <div class="badge" style="color: {badge_color};">{badge_text}</div>
+        <div class="channel-name">{channel}</div>
+        <div class="metric-value">{marginal_roi:.2f}x</div>
+        <div class="metric-label">Marginal ROI</div>
+        <div class="spend-info">{spend_label}</div>
+        <div class="action-text">→ Increase investment</div>
+    </div>
+    '''
 
 
 def calculate_confidence_level(ci_lower: float, ci_upper: float, 
@@ -978,4 +1075,3 @@ def calculate_confidence_level(ci_lower: float, ci_upper: float,
         return "medium"
     else:
         return "low"
-

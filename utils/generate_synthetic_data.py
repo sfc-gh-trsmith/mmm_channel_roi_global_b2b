@@ -31,161 +31,169 @@ DAILY_SPEND_BUDGET = ANNUAL_ADVERTISING_BUDGET / 365  # ~$480K/day total across 
 # B2B CHANNEL PERFORMANCE CONFIG (10 Channels for MMM Demo)
 # 
 # Realistic B2B channel mix with clear performance tiers:
-#   Tier 1 (Best): LinkedIn, Google Ads, Microsoft Ads
-#   Tier 2 (Good): YouTube, Programmatic, Trade Publications  
-#   Tier 3 (Marginal): Meta (Instagram), X.com, TikTok
-#   Tier 4 (Unprofitable): Meta (Facebook)
+#   Tier 1 (Best): LinkedIn, Google Ads, Trade Publications
+#   Tier 2 (Good): Microsoft Ads, YouTube, Programmatic
+#   Tier 3 (Marginal): Meta (Instagram), X.com
+#   Tier 4 (Unprofitable): TikTok, Meta (Facebook)
 #
-# CRITICAL FOR MMM: The model needs to detect spend→revenue correlation.
+# OPTIMIZED FOR DEMO: Tighter lags, lower noise, clearer tier separation
+# Target: Model R² > 0.85, ROIs in 0.7x-3.5x range (realistic B2B)
 # =============================================================================
 B2B_CHANNEL_PERFORMANCE = {
-    # === TIER 1: BEST PERFORMERS ===
-    # Tightened lags for stronger spend→revenue correlation in MMM
+    # === TIER 1: BEST PERFORMERS (ROI 2.5-3.5x) ===
+    # Very short lags for strong MMM signal detection
     "LinkedIn": {
-        "roas_target": 4.5,            # Best B2B channel - reaches decision makers
-        "win_rate": 0.72,              # High win rate
-        "deal_size_multiplier": 1.40,  # Larger enterprise deals
-        "spend_weight": 1.5,           # Highest budget allocation
+        "roas_target": 3.2,            # Best B2B channel - decision makers
+        "win_rate": 0.75,              # High win rate
+        "deal_size_multiplier": 1.30,  # Larger enterprise deals
+        "spend_weight": 1.8,           # Highest budget allocation
         "cpm": 75,                     # Premium B2B targeting
         "ctr": 0.004,                  # Lower CTR but higher quality
-        "opp_lag_min": 3,              # Tightened from 7
-        "opp_lag_max": 14,             # Tightened from 21
-        "cycle_min": 14,               # Tightened from 21
-        "cycle_max": 28,               # Tightened from 42
-        "rev_lag_min": 3,              # Tightened from 7
-        "rev_lag_max": 10,             # Tightened from 14
+        "opp_lag_min": 1,              # Very short - 1 week
+        "opp_lag_max": 7,              # Max 1 week
+        "cycle_min": 7,                # 1 week sales cycle
+        "cycle_max": 14,               # Max 2 weeks
+        "rev_lag_min": 1,              # Immediate recognition
+        "rev_lag_max": 7,              # Max 1 week
+        "noise_factor": 0.10,          # Low noise for clean signal
     },
     "Google Ads": {
-        "roas_target": 3.2,            # Second best - high intent search
-        "win_rate": 0.65,              # Strong conversion
+        "roas_target": 2.8,            # Second best - high intent search
+        "win_rate": 0.70,              # Strong conversion
         "deal_size_multiplier": 1.20,  # Good deals
-        "spend_weight": 1.3,           # Significant budget
+        "spend_weight": 1.5,           # Significant budget
         "cpm": 25,                     # Search/Display blend
         "ctr": 0.025,                  # High search intent CTR
-        "opp_lag_min": 3,              # Tightened from 7
-        "opp_lag_max": 14,             # Tightened from 28
-        "cycle_min": 14,               # Tightened from 28
-        "cycle_max": 35,               # Tightened from 56
-        "rev_lag_min": 3,              # Tightened from 7
-        "rev_lag_max": 14,             # Tightened from 21
+        "opp_lag_min": 1,              # Very short
+        "opp_lag_max": 7,              # Max 1 week
+        "cycle_min": 7,                # 1 week
+        "cycle_max": 14,               # Max 2 weeks
+        "rev_lag_min": 1,              # Immediate
+        "rev_lag_max": 7,              # Max 1 week
+        "noise_factor": 0.12,          # Low noise
     },
+    "Trade Publications": {
+        "roas_target": 2.5,            # Industry-specific media - strong B2B
+        "win_rate": 0.65,              # Good targeted audience
+        "deal_size_multiplier": 1.25,  # Industry buyers pay premium
+        "spend_weight": 1.0,           # Solid investment
+        "cpm": 35,                     # Premium industry placement
+        "ctr": 0.003,                  # Engaged readers
+        "opp_lag_min": 1,              # Short lag
+        "opp_lag_max": 10,             # Slightly longer for print
+        "cycle_min": 10,               # ~1.5 weeks
+        "cycle_max": 21,               # Max 3 weeks
+        "rev_lag_min": 3,              # Quick recognition
+        "rev_lag_max": 10,             # Max ~1.5 weeks
+        "noise_factor": 0.15,          # Moderate noise
+    },
+    # === TIER 2: GOOD PERFORMERS (ROI 1.5-2.2x) ===
     "Microsoft Ads": {
-        "roas_target": 2.4,            # Bing search + LinkedIn audience
-        "win_rate": 0.55,              # Good B2B conversion
-        "deal_size_multiplier": 1.15,  # Solid deals
-        "spend_weight": 0.8,           # Growing channel
+        "roas_target": 2.0,            # Bing search + LinkedIn audience
+        "win_rate": 0.60,              # Good B2B conversion
+        "deal_size_multiplier": 1.10,  # Solid deals
+        "spend_weight": 0.9,           # Growing channel
         "cpm": 20,                     # Lower than Google
         "ctr": 0.020,                  # Good search intent
-        "opp_lag_min": 3,              # Tightened from 7
-        "opp_lag_max": 14,             # Tightened from 28
-        "cycle_min": 14,               # Tightened from 28
-        "cycle_max": 35,               # Tightened from 56
-        "rev_lag_min": 3,              # Tightened from 7
-        "rev_lag_max": 14,             # Tightened from 21
+        "opp_lag_min": 3,              # Short lag
+        "opp_lag_max": 10,             # ~1.5 weeks
+        "cycle_min": 10,               # ~1.5 weeks
+        "cycle_max": 21,               # Max 3 weeks
+        "rev_lag_min": 3,              # Quick
+        "rev_lag_max": 10,             # Max ~1.5 weeks
+        "noise_factor": 0.15,          # Moderate noise
     },
-    # === TIER 2: GOOD PERFORMERS ===
-    # Tightened lags for stronger spend→revenue correlation in MMM
     "YouTube": {
         "roas_target": 1.8,            # Video content marketing
-        "win_rate": 0.50,              # Moderate conversion
+        "win_rate": 0.55,              # Moderate conversion
         "deal_size_multiplier": 1.05,  # Standard deals
-        "spend_weight": 0.7,           # Growing investment
+        "spend_weight": 0.8,           # Growing investment
         "cpm": 18,                     # Video rates
         "ctr": 0.005,                  # Video engagement
-        "opp_lag_min": 7,              # Tightened from 14
-        "opp_lag_max": 21,             # Tightened from 35
-        "cycle_min": 21,               # Tightened from 35
-        "cycle_max": 42,               # Tightened from 70
-        "rev_lag_min": 7,              # Tightened from 14
-        "rev_lag_max": 14,             # Tightened from 28
+        "opp_lag_min": 3,              # Short
+        "opp_lag_max": 14,             # ~2 weeks
+        "cycle_min": 14,               # 2 weeks
+        "cycle_max": 28,               # Max 4 weeks
+        "rev_lag_min": 3,              # Quick
+        "rev_lag_max": 14,             # Max 2 weeks
+        "noise_factor": 0.18,          # Moderate noise
     },
     "Programmatic": {
         "roas_target": 1.6,            # Brand awareness / display
-        "win_rate": 0.48,              # Moderate conversion
+        "win_rate": 0.50,              # Moderate conversion
         "deal_size_multiplier": 1.00,  # Standard deals
         "spend_weight": 0.7,           # Moderate budget
         "cpm": 15,                     # DSP rates
         "ctr": 0.001,                  # Display rates
-        "opp_lag_min": 7,              # Tightened from 14
-        "opp_lag_max": 21,             # Tightened from 35
-        "cycle_min": 21,               # Tightened from 35
-        "cycle_max": 42,               # Tightened from 70
-        "rev_lag_min": 7,              # Tightened from 14
-        "rev_lag_max": 14,             # Tightened from 28
+        "opp_lag_min": 3,              # Short
+        "opp_lag_max": 14,             # ~2 weeks
+        "cycle_min": 14,               # 2 weeks
+        "cycle_max": 28,               # Max 4 weeks
+        "rev_lag_min": 3,              # Quick
+        "rev_lag_max": 14,             # Max 2 weeks
+        "noise_factor": 0.18,          # Moderate noise
     },
-    "Trade Publications": {
-        "roas_target": 1.4,            # Industry-specific media
-        "win_rate": 0.45,              # Targeted audience
-        "deal_size_multiplier": 1.10,  # Industry buyers
-        "spend_weight": 0.5,           # Niche channel
-        "cpm": 35,                     # Premium industry placement
-        "ctr": 0.003,                  # Engaged readers
-        "opp_lag_min": 7,              # Tightened from 14
-        "opp_lag_max": 21,             # Tightened from 42
-        "cycle_min": 21,               # Tightened from 35
-        "cycle_max": 42,               # Tightened from 70
-        "rev_lag_min": 7,              # Tightened from 14
-        "rev_lag_max": 14,             # Tightened from 28
-    },
-    # === TIER 3: MARGINAL PERFORMERS ===
-    # Tightened lags for stronger spend→revenue correlation in MMM
+    # === TIER 3: MARGINAL PERFORMERS (ROI 1.0-1.3x) ===
     "Meta (Instagram)": {
-        "roas_target": 1.1,            # Slightly profitable - visual B2B
-        "win_rate": 0.40,              # Lower B2B fit
+        "roas_target": 1.2,            # Slightly profitable - visual B2B
+        "win_rate": 0.42,              # Lower B2B fit
         "deal_size_multiplier": 0.90,  # Smaller deals
         "spend_weight": 0.4,           # Limited B2B investment
         "cpm": 14,                     # Social rates
         "ctr": 0.006,                  # Visual engagement
-        "opp_lag_min": 10,             # Tightened from 21
-        "opp_lag_max": 28,             # Tightened from 49
-        "cycle_min": 28,               # Tightened from 42
-        "cycle_max": 49,               # Tightened from 84
-        "rev_lag_min": 7,              # Tightened from 14
-        "rev_lag_max": 21,             # Tightened from 35
+        "opp_lag_min": 7,              # Longer lag
+        "opp_lag_max": 21,             # ~3 weeks
+        "cycle_min": 21,               # 3 weeks
+        "cycle_max": 35,               # Max 5 weeks
+        "rev_lag_min": 7,              # Slower recognition
+        "rev_lag_max": 21,             # Max 3 weeks
+        "noise_factor": 0.22,          # Higher noise
     },
     "X.com": {
-        "roas_target": 1.0,            # Breakeven - B2B thought leadership
-        "win_rate": 0.35,              # Lower conversion
+        "roas_target": 1.1,            # Near breakeven - B2B thought leadership
+        "win_rate": 0.38,              # Lower conversion
         "deal_size_multiplier": 0.85,  # Smaller deals
         "spend_weight": 0.3,           # Declining platform
         "cpm": 10,                     # Lower rates
         "ctr": 0.004,                  # Engagement
-        "opp_lag_min": 10,             # Tightened from 21
-        "opp_lag_max": 28,             # Tightened from 49
-        "cycle_min": 28,               # Tightened from 49
-        "cycle_max": 56,               # Tightened from 91
-        "rev_lag_min": 10,             # Tightened from 21
-        "rev_lag_max": 21,             # Tightened from 42
+        "opp_lag_min": 7,              # Longer lag
+        "opp_lag_max": 21,             # ~3 weeks
+        "cycle_min": 21,               # 3 weeks
+        "cycle_max": 35,               # Max 5 weeks
+        "rev_lag_min": 7,              # Slower
+        "rev_lag_max": 21,             # Max 3 weeks
+        "noise_factor": 0.25,          # Higher noise
     },
+    # === TIER 4: UNPROFITABLE (ROI 0.7-0.9x) ===
     "TikTok": {
-        "roas_target": 0.95,           # Near breakeven - emerging B2B
-        "win_rate": 0.30,              # Poor B2B fit currently
-        "deal_size_multiplier": 0.75,  # Smaller deals
+        "roas_target": 0.85,           # Unprofitable - poor B2B fit
+        "win_rate": 0.30,              # Poor B2B conversion
+        "deal_size_multiplier": 0.70,  # Smallest deals
         "spend_weight": 0.25,          # Experimental budget
         "cpm": 8,                      # Low rates
         "ctr": 0.008,                  # High engagement, low intent
-        "opp_lag_min": 14,             # Tightened from 28
-        "opp_lag_max": 35,             # Tightened from 56
-        "cycle_min": 35,               # Tightened from 56
-        "cycle_max": 63,               # Tightened from 98
-        "rev_lag_min": 10,             # Tightened from 21
-        "rev_lag_max": 21,             # Tightened from 42
+        "opp_lag_min": 14,             # Long lag
+        "opp_lag_max": 35,             # ~5 weeks
+        "cycle_min": 28,               # 4 weeks
+        "cycle_max": 49,               # Max 7 weeks
+        "rev_lag_min": 10,             # Slow recognition
+        "rev_lag_max": 28,             # Max 4 weeks
+        "noise_factor": 0.30,          # High noise - unreliable
     },
-    # === TIER 4: UNPROFITABLE ===
-    # Tightened lags for stronger spend→revenue correlation in MMM
     "Meta (Facebook)": {
-        "roas_target": 0.85,           # UNPROFITABLE - poor B2B fit
-        "win_rate": 0.28,              # Low B2B conversion
-        "deal_size_multiplier": 0.70,  # Smallest deals
-        "spend_weight": 0.35,          # Should reduce spend
+        "roas_target": 0.75,           # UNPROFITABLE - worst B2B fit
+        "win_rate": 0.25,              # Very low B2B conversion
+        "deal_size_multiplier": 0.65,  # Smallest deals
+        "spend_weight": 0.3,           # Should reduce spend
         "cpm": 12,                     # Low B2B rates
         "ctr": 0.007,                  # Social engagement
-        "opp_lag_min": 14,             # Tightened from 28
-        "opp_lag_max": 35,             # Tightened from 56
-        "cycle_min": 35,               # Tightened from 56
-        "cycle_max": 63,               # Tightened from 98
-        "rev_lag_min": 10,             # Tightened from 21
-        "rev_lag_max": 21,             # Tightened from 42
+        "opp_lag_min": 14,             # Long lag
+        "opp_lag_max": 35,             # ~5 weeks
+        "cycle_min": 28,               # 4 weeks
+        "cycle_max": 49,               # Max 7 weeks
+        "rev_lag_min": 10,             # Slow recognition
+        "rev_lag_max": 28,             # Max 4 weeks
+        "noise_factor": 0.30,          # High noise - unreliable
     },
 }
 
@@ -339,89 +347,88 @@ def generate_spend(campaigns_df):
 
 def generate_opportunities(spend_df, campaigns_df):
     """
-    Generate opportunities calibrated for MMM demo success.
+    Generate opportunities with STRONG spend→revenue correlation for MMM demo.
     
-    CRITICAL FOR MMM MODEL:
-    - Short lags (1-6 weeks) so model can detect spend→revenue correlation
-    - High win rates (40-72%) so sufficient revenue is generated
-    - Consistent deal sizes (reduced variance) for cleaner signal
-    - Direct relationship between spend amount and opportunity generation
+    KEY DESIGN FOR MODEL FIT:
+    - Direct spend→revenue relationship: revenue ~ spend * ROAS_target
+    - Very short lags (1-3 weeks total from spend to revenue)
+    - Low noise on high-performing channels, high noise on poor channels
+    - Deterministic base with controlled variance
     
     Uses B2B_CHANNEL_PERFORMANCE config for channel-specific parameters.
     """
     opps = []
     campaign_lookup = campaigns_df.set_index("CAMPAIGN_ID").to_dict("index")
     
-    # Calculate total spend by channel to calibrate opportunity generation
-    channel_spend = spend_df.groupby("CHANNEL")["SPEND_AMT"].sum().to_dict()
-    
-    # Sample MORE records for better coverage - use 80% of spend records
-    trigger_records = spend_df.sample(frac=0.80, random_state=RANDOM_SEED)
-    
-    for _, row in trigger_records.iterrows():
+    # Process ALL spend records for better coverage
+    for _, row in spend_df.iterrows():
         camp = campaign_lookup[row["CAMPAIGN_ID"]]
         channel = camp["CHANNEL"]
         
         # Get channel config from B2B_CHANNEL_PERFORMANCE
         ch_config = B2B_CHANNEL_PERFORMANCE.get(channel, {
             "win_rate": 0.50, "deal_size_multiplier": 1.0, "roas_target": 2.0,
-            "opp_lag_min": 14, "opp_lag_max": 35, "cycle_min": 30, "cycle_max": 60
+            "opp_lag_min": 7, "opp_lag_max": 21, "cycle_min": 14, "cycle_max": 28,
+            "noise_factor": 0.20
         })
         
-        # Scale opportunity count by spend and ROAS target
-        # Higher ROAS targets need more/better opportunities
+        # DETERMINISTIC opportunity generation based on spend
+        # This creates a direct spend→revenue relationship the model can detect
         roas_target = ch_config.get("roas_target", 2.0)
-        spend_level = row["SPEND_AMT"] / 25000  # Normalize
+        noise_factor = ch_config.get("noise_factor", 0.20)
         
-        # More opportunities for higher ROAS channels
-        base_opps = roas_target / 2.0  # LinkedIn: 2.25, Facebook: 0.6
-        num_opps = max(1, int(np.random.poisson(base_opps * spend_level)))
+        # Expected revenue from this day's spend
+        expected_revenue = row["SPEND_AMT"] * roas_target
+        
+        # Number of opps scaled by expected revenue (~$150K per opp average)
+        # Higher ROAS channels generate more/larger opps
+        num_opps = max(1, int(expected_revenue / 150000))
         
         for _ in range(num_opps):
             # Use channel-specific SHORT lags
-            opp_lag_min = ch_config.get("opp_lag_min", 14)
-            opp_lag_max = ch_config.get("opp_lag_max", 35)
+            opp_lag_min = ch_config.get("opp_lag_min", 7)
+            opp_lag_max = ch_config.get("opp_lag_max", 21)
             lag_days = random.randint(opp_lag_min, opp_lag_max)
             created_date = row["DATE"] + timedelta(days=lag_days)
             
             if created_date > END_DATE:
                 continue
                 
-            # Use channel-specific HIGH win rate
+            # Use channel-specific win rate
             win_rate = ch_config.get("win_rate", 0.50)
             
-            # Small campaign type adjustment
+            # Campaign type adjustment (smaller effect)
             if camp["TYPE"] == "LeadGen":
-                win_rate = min(0.85, win_rate * 1.10)
+                win_rate = min(0.90, win_rate * 1.05)
             elif camp["TYPE"] == "Brand":
-                win_rate *= 0.95
+                win_rate *= 0.98
                 
-            # Stage distribution - favor Closed Won for demo
-            closed_lost_rate = min(0.30, (1 - win_rate) * 0.6)
-            open_rate = max(0.05, 1.0 - win_rate - closed_lost_rate)
+            # Simplified stage distribution
+            closed_lost_rate = max(0.05, 1.0 - win_rate - 0.05)
             
             stage = np.random.choice(
                 ["Closed Won", "Closed Lost", "Negotiation"], 
-                p=[win_rate, closed_lost_rate, open_rate]
+                p=[win_rate, closed_lost_rate, 0.05]
             )
             
             # Use channel-specific SHORT sales cycles
-            cycle_min = ch_config.get("cycle_min", 30)
-            cycle_max = ch_config.get("cycle_max", 60)
+            cycle_min = ch_config.get("cycle_min", 14)
+            cycle_max = ch_config.get("cycle_max", 28)
             cycle_days = random.randint(cycle_min, cycle_max)
             close_date = created_date + timedelta(days=cycle_days)
             
-            # Deal sizes: REDUCED VARIANCE for cleaner signal
-            # Using lognormal with lower sigma (0.25 instead of 0.4)
-            # Mean ~$200K with much tighter distribution for better MMM signal
-            deal_amount = np.random.lognormal(12.2, 0.25)  # ~$200K mean, CV ~0.25
+            # Deal size: based on expected revenue per opp with controlled noise
+            # Lower noise_factor = more predictable = better model fit
+            base_deal = expected_revenue / num_opps
+            deal_amount = base_deal * (1 + np.random.normal(0, noise_factor))
+            deal_amount = max(25000, deal_amount)  # Floor at $25K
             
             # Apply channel-specific deal size multiplier
             deal_amount *= ch_config.get("deal_size_multiplier", 1.0)
                 
             # Business group adjustments (smaller effect)
             if camp["BG"] == "HCBG":
-                deal_amount *= 1.10
+                deal_amount *= 1.05
             
             opps.append({
                 "OPPORTUNITY_ID": f"OPP-{fake.uuid4()[:8]}",
@@ -441,13 +448,12 @@ def generate_revenue(opps_df, campaigns_df):
     """
     Generate revenue/invoices from Closed Won opportunities.
     
-    CRITICAL FOR MMM DEMO:
-    Revenue recognition timing is SHORT to ensure model can detect correlation:
-    - Direct sales: 7-21 days after close (60% of deals)
-    - Standard: 14-35 days after close (30% of deals)
-    - Enterprise: 21-42 days after close (10% of deals)
+    OPTIMIZED FOR MMM DEMO:
+    Revenue recognition is IMMEDIATE to create strong spend→revenue correlation:
+    - 80% of deals: 1-7 days after close (single invoice)
+    - 20% of deals: 7-14 days after close
     
-    Total spend→revenue lag should be 4-10 weeks for most deals.
+    Total spend→revenue lag should be 2-4 weeks for Tier 1 channels.
     """
     won_opps = opps_df[opps_df["STAGE"] == "Closed Won"]
     
@@ -467,42 +473,35 @@ def generate_revenue(opps_df, campaigns_df):
         if campaign_id and campaign_id in campaign_lookup:
             channel = campaign_lookup[campaign_id]["CHANNEL"]
             ch_config = B2B_CHANNEL_PERFORMANCE.get(channel, {})
-            rev_lag_min = ch_config.get("rev_lag_min", 7)
-            rev_lag_max = ch_config.get("rev_lag_max", 21)
+            rev_lag_min = ch_config.get("rev_lag_min", 1)
+            rev_lag_max = ch_config.get("rev_lag_max", 7)
         else:
-            rev_lag_min = 7
-            rev_lag_max = 21
+            rev_lag_min = 1
+            rev_lag_max = 7
         
-        # Determine deal type - favor quick recognition for demo
+        # Simplified: 80% immediate (single invoice), 20% slightly delayed
         deal_type = np.random.choice(
-            ["direct", "standard", "enterprise"],
-            p=[0.60, 0.30, 0.10]  # 60% direct for fast recognition
+            ["immediate", "standard"],
+            p=[0.80, 0.20]
         )
         
-        if deal_type == "direct":
-            # Direct sales: single invoice, very quick
+        if deal_type == "immediate":
+            # Single invoice, very quick recognition
             num_invoices = 1
             base_lag = random.randint(rev_lag_min, rev_lag_max)
             lag_increment = 0
-            
-        elif deal_type == "standard":
-            # Standard: 1-2 invoices
-            num_invoices = random.randint(1, 2)
-            base_lag = random.randint(rev_lag_min, rev_lag_max + 7)
-            lag_increment = random.randint(7, 14)
-            
-        else:  # enterprise
-            # Enterprise: 2 milestone invoices
-            num_invoices = 2
-            base_lag = random.randint(rev_lag_min + 7, rev_lag_max + 14)
-            lag_increment = random.randint(14, 21)
+        else:
+            # Standard: single invoice, slightly longer
+            num_invoices = 1
+            base_lag = random.randint(rev_lag_max, rev_lag_max + 7)
+            lag_increment = 0
         
         for i in range(num_invoices):
             lag_days = base_lag + (lag_increment * i)
             inv_date = opp["CLOSE_DATE"] + timedelta(days=lag_days)
             
             # Keep revenue within the data window
-            if inv_date > END_DATE + timedelta(days=60):
+            if inv_date > END_DATE + timedelta(days=30):
                 continue
             
             # Cap at END_DATE for reporting

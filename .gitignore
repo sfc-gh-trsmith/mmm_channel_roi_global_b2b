@@ -206,3 +206,12 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .cursor
+
+# Streamlit deployment output
+streamlit/output/
+problem_statement_app/output/
+workspace/
+
+# Local scratch files
+local/
+runner/

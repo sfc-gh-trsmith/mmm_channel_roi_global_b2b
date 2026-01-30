@@ -33,7 +33,7 @@ from utils.styling import (
     COLOR_SUCCESS,
     COLOR_WARNING,
     COLOR_DANGER,
-    BG_DARK,
+    BG_LIGHT,
     BG_CARD,
     BG_HOVER
 )
@@ -89,7 +89,7 @@ __all__ = [
     'COLOR_SUCCESS',
     'COLOR_WARNING',
     'COLOR_DANGER',
-    'BG_DARK',
+    'BG_LIGHT',
     'BG_CARD',
     'BG_HOVER',
     

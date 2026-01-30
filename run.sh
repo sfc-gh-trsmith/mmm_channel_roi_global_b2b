@@ -11,7 +11,7 @@
 set -e
 set -o pipefail
 
-CONNECTION_NAME="demo"
+CONNECTION_NAME=""  # Empty = use snowcli default connection
 COMMAND=""
 ENV_PREFIX=""
 
@@ -34,7 +34,7 @@ Commands:
   streamlit  Get Streamlit App URL
 
 Options:
-  -c, --connection NAME    Snowflake CLI connection name
+  -c, --connection NAME    Snowflake CLI connection name (default: snowcli default)
   -p, --prefix PREFIX      Environment prefix
   -h, --help               Show this help
 EOF
@@ -58,7 +58,12 @@ done
 
 [ -z "$COMMAND" ] && usage
 
-SNOW_CONN="-c $CONNECTION_NAME"
+# Build connection argument (empty if using default)
+if [ -n "$CONNECTION_NAME" ]; then
+    SNOW_CONN="-c $CONNECTION_NAME"
+else
+    SNOW_CONN=""
+fi
 
 if [ -n "$ENV_PREFIX" ]; then
     FULL_PREFIX="${ENV_PREFIX}_${PROJECT_PREFIX}"
@@ -78,15 +83,19 @@ cmd_main() {
     echo "=================================================="
     
     echo "Triggering notebook execution..."
-    snow sql $SNOW_CONN -q "
+    if ! snow sql $SNOW_CONN -q "
         USE ROLE ${ROLE};
         USE DATABASE ${DATABASE};
         USE SCHEMA MMM;
         EXECUTE NOTEBOOK MMM_TRAINING_NOTEBOOK();
-    "
+    "; then
+        error_exit "Notebook execution failed"
+    fi
     
     echo -e "${GREEN}[OK]${NC} Notebook executed successfully."
 }
+
+
 
 cmd_status() {
     echo "=================================================="

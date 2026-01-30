@@ -497,7 +497,7 @@ The success of this dataset relies on a strict naming convention and dimensional
 | `SOLD_TO_PARTY` | Varchar | **Distributors:** "Grainger," "Fastenal," "McKesson," "Cardinal Health." |
 | `SHIP_TO_PARTY` | Varchar | The end customer (optional, often null in distribution). |
 | `MATERIAL_NUM` | Varchar | `70-0064-1234-5` (Mimic standard industrial SKU formats). |
-| `MATERIAL_DESC` | Varchar | "N95 Particulate Respirator," "Structural Adhesive 3M," "Surgical Drape." |
+| `MATERIAL_DESC` | Varchar | "N95 Particulate Respirator," "Industrial Structural Adhesive," "Surgical Drape." |
 | `PROFIT_CENTER` | Varchar | Maps to Business Group (e.g., `PC_SIBG_NA`). |
 | `NET_VALUE_USD` | Float | Revenue amount. |
 | `QUANTITY` | Integer | Units sold. |

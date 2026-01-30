@@ -49,6 +49,12 @@ REGION_COORDS = {
         'name': 'LATAM',
         'full_name': 'Latin America'
     },
+    'GLOBAL': {
+        'lat': 20.0,
+        'lon': 0.0,
+        'name': 'Global',
+        'full_name': 'Global (All Regions)'
+    },
 }
 
 
@@ -321,22 +327,23 @@ def render_region_selector_map(df_results: pd.DataFrame,
     else:
         st.info("No regional data available for map visualization.")
     
-    # Build segmented control options with ROI values
-    seg_options = [{'value': 'all', 'label': 'All Regions', 'badge': ''}]
+    # Build segmented control options - only show regions that actually have data
+    seg_options = [{'value': 'all', 'label': 'All Channels', 'badge': ''}]
     
-    for region_code in REGION_COORDS.keys():
+    # Get unique regions from the data (not from REGION_COORDS)
+    available_regions = df_regional['REGION'].unique() if not df_regional.empty else []
+    
+    for region_code in available_regions:
         region_data = df_regional[df_regional['REGION'] == region_code]
         if not region_data.empty:
             roi = region_data['AVG_ROI'].iloc[0]
             roi_text = f"{roi:.1f}x"
-        else:
-            roi_text = "N/A"
-        
-        seg_options.append({
-            'value': region_code,
-            'label': region_code,
-            'badge': roi_text
-        })
+            region_name = REGION_COORDS.get(region_code, {}).get('name', region_code)
+            seg_options.append({
+                'value': region_code,
+                'label': region_name,
+                'badge': roi_text
+            })
     
     # Current selection value for segmented control
     current_sel = st.session_state[state_key] if st.session_state[state_key] else 'all'
